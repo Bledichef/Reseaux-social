@@ -14,7 +14,7 @@ exports.router = (function () {
   apiRouter.route("/users/me").put(usersCtrl.updateUserProfile);
 
   // routes Messages
-  apiRouter.route("/messages/new").post(messagesCtrl.createMessage);
+  apiRouter.route("/messages/new/").post(messagesCtrl.createMessage);
   apiRouter.route("/messages/").get(messagesCtrl.listMessages);
 
   return apiRouter;

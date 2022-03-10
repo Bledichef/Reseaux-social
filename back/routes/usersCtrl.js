@@ -169,7 +169,7 @@ module.exports = {
         if (user) {
           res.status(201).json(user);
         } else {
-          res.status(404).json({ error: "Utilisateur inexistant " });
+          res.status(404).json({ error: "Utilisateur inexistant1 " });
         }
       })
       .catch(function (err) {
@@ -204,8 +204,6 @@ module.exports = {
           if (userFound) {
             userFound
               .update({
-                email: email ? email : userFound.email,
-                username: username ? username : userFound.username,
                 job: job ? job : userFound.job,
               })
               .then(function () {
@@ -217,7 +215,7 @@ module.exports = {
                   .json({ error: "Impossible de modifier l'utilisateur" });
               });
           } else {
-            res.status(404).json({ error: "Utilisateur inexistant" });
+            res.status(404).json({ error: "Utilisateur inexistant2" });
           }
         },
       ],

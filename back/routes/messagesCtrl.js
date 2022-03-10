@@ -3,10 +3,8 @@
 var models = require("../models");
 var asynclib = require("async");
 var jwtUtils = require("../utils/jwt.utils");
-// Constants
 
 // Routes
-
 module.exports = {
   createMessage: function (req, res) {
     // Getting auth header
@@ -14,8 +12,11 @@ module.exports = {
     var userId = jwtUtils.getUserId(headerAuth);
 
     // Params
-    var title = req.body.title;
-    var content = req.body.content;
+
+    console.log(title);
+    console.log(content);
+    var title = req.Body.title;
+    var content = req.Body.content;
 
     if (title == null || content == null) {
       return res.status(400).json({ error: " Titre ou article vide " });
@@ -26,7 +27,8 @@ module.exports = {
         error: " le Titre ou le contenu de votre article sont trop court",
       });
     }
-
+    console.log(title);
+    console.log(content);
     asynclib.waterfall(
       [
         function (done) {
