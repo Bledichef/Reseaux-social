@@ -3,6 +3,7 @@
 var models = require("../models");
 var asynclib = require("async");
 var jwtUtils = require("../utils/jwt.utils");
+const { request } = require("express");
 
 // Routes
 module.exports = {
@@ -13,11 +14,10 @@ module.exports = {
 
     // Params
 
+    var title = req.body.title;
+    var content = req.body.content;
     console.log(title);
     console.log(content);
-    var title = req.Body.title;
-    var content = req.Body.content;
-
     if (title == null || content == null) {
       return res.status(400).json({ error: " Titre ou article vide " });
     }
