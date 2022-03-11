@@ -183,7 +183,9 @@ module.exports = {
 
     // Params
     var job = req.body.job;
+
     console.log(job);
+
     asynclib.waterfall(
       [
         function (done) {
