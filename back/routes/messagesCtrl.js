@@ -3,7 +3,6 @@
 var models = require("../models");
 var asynclib = require("async");
 var jwtUtils = require("../utils/jwt.utils");
-const { request } = require("express");
 
 // Routes
 module.exports = {
@@ -18,6 +17,7 @@ module.exports = {
     var content = req.body.content;
     console.log(title);
     console.log(content);
+
     if (title == null || content == null) {
       return res.status(400).json({ error: " Titre ou article vide " });
     }
@@ -74,6 +74,10 @@ module.exports = {
     var limit = parseInt(req.query.limit);
     var offset = parseInt(req.query.offset);
     var order = req.query.order;
+
+    if (limit > 50) {
+      limit = 50;
+    }
 
     models.Message.findAll({
       order: [order != null ? order.split(":") : ["title", "ASC"]],
