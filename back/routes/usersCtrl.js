@@ -184,13 +184,16 @@ module.exports = {
     // Params
     var job = req.body.job;
 
+    var username = req.body.username;
+
     console.log(job);
+    console.log(username);
 
     asynclib.waterfall(
       [
         function (done) {
           models.User.findOne({
-            attributes: ["id", "job"],
+            attributes: ["id", "username", "job"],
             where: { id: userId },
           })
             .then(function (userFound) {
@@ -206,7 +209,66 @@ module.exports = {
           if (userFound) {
             userFound
               .update({
+                username: username ? username : userFound.username,
                 job: job ? job : userFound.job,
+              })
+              .then(function () {
+                done(userFound);
+              })
+              .catch(function (err) {
+                res
+                  .status(500)
+                  .json({ error: "Impossible de modifier l'utilisateur" });
+              });
+          } else {
+            res.status(404).json({ error: "Utilisateur inexistant2" });
+          }
+        },
+      ],
+      function (userFound) {
+        if (userFound) {
+          return res.status(201).json(userFound);
+        } else {
+          return res
+            .status(500)
+            .json({ error: "Modification du profile impossible " });
+        }
+      }
+    );
+  },
+  deleteUserProfile: function (req, res) {
+    // Getting auth header
+    var headerAuth = req.headers["authorization"];
+    var userId = jwtUtils.getUserId(headerAuth);
+
+    // Params
+    var job = req.body.job;
+
+    var username = req.body.username;
+
+    console.log(job);
+
+    asynclib.waterfall(
+      [
+        function (done) {
+          models.User.findOne({
+            attributes: ["id", "username", "job"],
+            where: { id: userId },
+          })
+            .then(function (userFound) {
+              done(null, userFound);
+            })
+            .catch(function (err) {
+              return res
+                .status(500)
+                .json({ error: "Impossible de verifier Utilisateur" });
+            });
+        },
+        function (userFound, done) {
+          if (userFound) {
+            userFound
+              .destroy({
+                where: userFound,
               })
               .then(function () {
                 done(userFound);
