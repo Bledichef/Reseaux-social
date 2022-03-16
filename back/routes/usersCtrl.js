@@ -252,7 +252,7 @@ module.exports = {
       [
         function (done) {
           models.User.findOne({
-            attributes: ["id", "username", "job"],
+            attributes: ["id", "email", "username", "job"],
             where: { id: userId },
           })
             .then(function (userFound) {
@@ -266,7 +266,8 @@ module.exports = {
         },
         function (userFound, done) {
           if (userFound) {
-            userFound
+            userFound;
+            models.user
               .destroy({
                 where: userFound,
               })
@@ -276,7 +277,7 @@ module.exports = {
               .catch(function (err) {
                 res
                   .status(500)
-                  .json({ error: "Impossible de modifier l'utilisateur" });
+                  .json({ error: "Impossible de supprimer l'utilisateur" });
               });
           } else {
             res.status(404).json({ error: "Utilisateur inexistant2" });
@@ -289,7 +290,7 @@ module.exports = {
         } else {
           return res
             .status(500)
-            .json({ error: "Modification du profile impossible " });
+            .json({ error: "suppression du profile impossible " });
         }
       }
     );
