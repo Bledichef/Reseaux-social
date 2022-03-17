@@ -266,8 +266,8 @@ module.exports = {
         },
         function (userFound, done) {
           if (userFound) {
-            userFound;
-            models.user
+            userFound
+
               .destroy({
                 where: userFound,
               })

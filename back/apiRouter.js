@@ -13,7 +13,7 @@ exports.router = (function () {
   apiRouter.route("/users/login/").post(usersCtrl.login);
   apiRouter.route("/users/me").get(usersCtrl.getUserProfile);
   apiRouter.route("/users/me").put(usersCtrl.updateUserProfile);
-  apiRouter.route(".users/me").delete(usersCtrl.deleteUserProfile);
+  apiRouter.route("/users/me").delete(usersCtrl.deleteUserProfile);
 
   // routes Messages
   apiRouter.route("/messages/new/").post(messagesCtrl.createMessage);
