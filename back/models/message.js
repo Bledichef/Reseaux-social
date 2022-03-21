@@ -1,4 +1,5 @@
 "use strict";
+
 module.exports = (sequelize, DataTypes) => {
   var Message = sequelize.define(
     "Message",
@@ -6,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       content: DataTypes.STRING,
       attachement: DataTypes.STRING,
+      comment: DataTypes.STRING,
       likes: DataTypes.INTEGER,
     },
     {
