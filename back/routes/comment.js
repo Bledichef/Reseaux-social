@@ -12,7 +12,7 @@ module.exports = {
     var userId = jwtUtils.getUserId(headerAuth);
 
     // Params
-    var messageId = parseInt(req.params.messageId);
+
     var content = req.body.content;
 
     if (content == null) {
@@ -22,28 +22,28 @@ module.exports = {
     asynclib.waterfall(
       [
         function (done) {
-          models.Message.findOne({
-            where: { id: messageId },
+          models.User.findOne({
+            where: { id: userId },
           })
-            .then(function (messageFound) {
-              done(null, messageFound);
+            .then(function (userFound) {
+              done(null, userFound);
             })
             .catch(function (err) {
               return res
                 .status(500)
-                .json({ error: " Impossible de verifier le message " });
+                .json({ error: " utilisateur introuvable  " });
             });
         },
-        function (messageFound, done) {
-          if (messageFound) {
+        function (userFound, done) {
+          if (userFound) {
             models.Comment.create({
               content: content,
-              MessageId: messageFound.id,
+              UserId: userFound.id,
             }).then(function (newComment) {
               done(newComment);
             });
           } else {
-            res.status(404).json({ error: "message non trouvé" });
+            res.status(404).json({ error: "utilisateur non trouvé" });
           }
         },
       ],
