@@ -12,38 +12,53 @@ module.exports = {
     var userId = jwtUtils.getUserId(headerAuth);
 
     // Params
-
+    var messageId = parseInt(req.params.messageId);
     var content = req.body.content;
 
     if (content == null) {
       return res.status(400).json({ error: " Commentaire vide " });
     }
 
+    console.log(content);
     asynclib.waterfall(
       [
         function (done) {
-          models.User.findOne({
-            where: { id: userId },
+          models.Message.findOne({
+            where: { id: messageId },
           })
-            .then(function (userFound) {
-              done(null, userFound);
+            .then(function (messageFound) {
+              done(null, messageFound);
             })
             .catch(function (err) {
               return res
                 .status(500)
-                .json({ error: " utilisateur introuvable  " });
+                .json({ error: "unable to verify message1" });
             });
         },
-        function (userFound, done) {
+        function (messageFound, done) {
+          if (messageFound) {
+            models.User.findOne({
+              where: { id: userId },
+            })
+              .then(function (userFound) {
+                done(null, messageFound, userFound);
+              })
+              .catch(function (err) {
+                return res.status(500).json({ error: "unable to verify user" });
+              });
+          }
+        },
+        function (messageFound, userFound, done) {
           if (userFound) {
             models.Comment.create({
               content: content,
               UserId: userFound.id,
+              messageId: messageFound.id,
             }).then(function (newComment) {
               done(newComment);
             });
           } else {
-            res.status(404).json({ error: "utilisateur non trouvé" });
+            res.status(404).json({ error: "Utilisateur non trouvé" });
           }
         },
       ],
@@ -52,8 +67,8 @@ module.exports = {
           return res.status(201).json(newComment);
         } else {
           return res
-            .status(201)
-            .json({ error: " impossible de poster le commentaire" });
+            .status(500)
+            .json({ error: "Impossible de poster le message" });
         }
       }
     );
@@ -67,21 +82,17 @@ module.exports = {
     if (limit > 50) {
       limit = 50;
     }
-    models.Message.findAll({
-      order: [order != null ? order.split(":") : ["title", "ASC"]],
-      attributes: fields !== "*" && fields != null ? fields.split(",") : null,
-      limit: !isNaN(limit) ? limit : null,
-      offset: !isNaN(offset) ? offset : null,
+    models.Comment.findAll({
       include: [
         {
-          model: models.Message,
-          attributes: ["content"],
+          model: models.User,
+          attributes: ["username"],
         },
       ],
     })
-      .then(function (messages) {
-        if (messages) {
-          res.status(200).json(messages);
+      .then(function (comment) {
+        if (comment) {
+          res.status(200).json(comment);
         } else {
           res.status(404).json({ error: "Pas de commentaire trouvé" });
         }

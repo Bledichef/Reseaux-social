@@ -3,7 +3,7 @@ var express = require("express");
 var usersCtrl = require("./routes/usersCtrl");
 var messagesCtrl = require("./routes/messagesCtrl");
 var likesCtrl = require("./routes/likesCtrl");
-var commentCtrl = require("./routes/comment");
+var commentCtrl = require("./routes/commentCtrl");
 
 // Router
 exports.router = (function () {
