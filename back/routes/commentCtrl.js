@@ -85,8 +85,8 @@ module.exports = {
     models.Comment.findAll({
       include: [
         {
-          model: models.User,
-          attributes: ["username"],
+          model: models.Message,
+          attributes: ["username", "messageId", "content"],
         },
       ],
     })

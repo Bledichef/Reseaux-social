@@ -24,11 +24,6 @@ module.exports = (sequelize, DataTypes) => {
   );
   Comment.associate = function (models) {
     // associations can be defined here
-
-    models.Like.belongsTo(models.User, {
-      foreignKey: "userId",
-      as: "user",
-    });
   };
   return Comment;
 };
