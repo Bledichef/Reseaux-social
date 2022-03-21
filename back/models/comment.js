@@ -36,16 +36,6 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "messageId",
       otherKey: "userId",
     });
-
-    models.Like.belongsTo(models.User, {
-      foreignKey: "userId",
-      as: "user",
-    });
-
-    models.Like.belongsTo(models.Message, {
-      foreignKey: "messageId",
-      as: "message",
-    });
   };
   return Comment;
 };

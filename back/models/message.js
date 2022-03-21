@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       content: DataTypes.STRING,
       attachement: DataTypes.STRING,
-      comment: DataTypes.STRING,
       likes: DataTypes.INTEGER,
     },
     {
@@ -19,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: {
               allowNull: false,
             },
+          });
+          models.Message.belongsTo(models.Comment, {
+            foreignKey: "commentId",
+            as: "comment",
           });
         },
       },
