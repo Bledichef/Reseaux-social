@@ -103,4 +103,61 @@ module.exports = {
         res.status(500).json({ error: "Champs invalide" });
       });
   },
+
+  updateMessages: function (req, res) {
+    // Getting auth header
+    var headerAuth = req.headers["authorization"];
+    var userId = jwtUtils.getUserId(headerAuth);
+
+    // Params
+    var title = req.body.title;
+    var content = req.body.content;
+
+    asynclib.waterfall(
+      [
+        function (done) {
+          models.Message.findOne({
+            attributes: ["id", "title", "content"],
+            where: { id: userId },
+          })
+            .then(function (userFound) {
+              done(null, userFound);
+            })
+            .catch(function (err) {
+              return res
+                .status(500)
+                .json({ error: "Impossible de verifier Utilisateur" });
+            });
+        },
+        function (userFound, done) {
+          if (userFound) {
+            userFound
+              .update({
+                title: title ? title : userFound.title,
+                content: content ? content : userFound.content,
+              })
+              .then(function () {
+                done(userFound);
+              })
+              .catch(function (err) {
+                res
+                  .status(500)
+                  .json({ error: "Impossible de modifier le message" });
+              });
+          } else {
+            res.status(404).json({ error: "Utilisateur inexistant2" });
+          }
+        },
+      ],
+      function (userFound) {
+        if (userFound) {
+          return res.status(201).json(userFound);
+        } else {
+          return res
+            .status(500)
+            .json({ error: "Modification du message impossible " });
+        }
+      }
+    );
+  },
 };

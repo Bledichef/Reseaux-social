@@ -82,14 +82,7 @@ module.exports = {
     if (limit > 50) {
       limit = 50;
     }
-    models.Comment.findAll({
-      include: [
-        {
-          model: models.Message,
-          attributes: ["username", "messageId", "content"],
-        },
-      ],
-    })
+    models.Comment.findAll({})
       .then(function (comment) {
         if (comment) {
           res.status(200).json(comment);

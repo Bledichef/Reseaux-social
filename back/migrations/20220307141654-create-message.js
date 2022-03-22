@@ -1,5 +1,7 @@
 "use strict";
 
+const sequelize = require("sequelize");
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Messages", {
@@ -18,6 +20,10 @@ module.exports = {
         },
       },
       commentId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      commentContent: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
