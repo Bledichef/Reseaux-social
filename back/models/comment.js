@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
   );
   Comment.associate = function (models) {
     // associations can be defined here
+
+    models.Comment.belongsTo(models.User, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
   };
   return Comment;
 };

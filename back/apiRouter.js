@@ -32,6 +32,9 @@ exports.router = (function () {
     .route("/messages/:messageId/comment/new/")
     .post(commentCtrl.createComment);
   apiRouter.route("/messages/:messageId/comment/").get(commentCtrl.listComment);
+  apiRouter
+    .route("/messages/:messageId/comment/:commentId/")
+    .put(commentCtrl.updateComment);
 
   return apiRouter;
 })();
