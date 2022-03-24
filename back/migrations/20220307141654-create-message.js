@@ -19,6 +19,7 @@ module.exports = {
           key: "id",
         },
       },
+
       commentId: {
         allowNull: false,
         type: Sequelize.INTEGER,

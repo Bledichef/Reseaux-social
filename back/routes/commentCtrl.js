@@ -135,7 +135,9 @@ module.exports = {
                   .json({ error: "Impossible de modifier le commentaire" });
               });
           } else {
-            res.status(404).json({ error: "Utilisateur inexistant2" });
+            res
+              .status(404)
+              .json({ error: "Vous ne pouvez pas modifié ce commentaire" });
           }
         },
       ],
@@ -149,5 +151,9 @@ module.exports = {
         }
       }
     );
+  },
+  updateCommentAdmin: function (req, res) {
+    // Params
+    var content = req.body.content;
   },
 };
