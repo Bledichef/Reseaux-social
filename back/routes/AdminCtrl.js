@@ -8,6 +8,10 @@ const { TRUE } = require("node-sass");
 
 module.exports = {
   adminUpdateMessages: function (req, res) {
+    // Getting auth header
+    var headerAuth = req.headers["authorization"];
+    var userId = jwtUtils.getUserId(headerAuth);
+
     // Params
     var title = req.body.title;
     var content = req.body.content;
@@ -17,8 +21,8 @@ module.exports = {
       [
         function (done) {
           models.User.findOne({
-            attributes: ["id", "isAdmin"],
-            where: { Admin: "isAdmin" },
+            attributes: ["isAdmin"],
+            where: { isAdmin: Admin },
           })
 
             .then(function (userAdmin) {
@@ -30,13 +34,12 @@ module.exports = {
                 .json({ error: "Utilisateur n'est pas Admin" });
             });
         },
-        function (userAdmin, done) {
-          if (userAdmin) {
-            userAdmin
-              .update({
-                title: title ? title : userFound.title,
-                content: content ? content : userFound.content,
-              })
+        function () {
+          if (User.isAdmin == Admin) {
+            update({
+              title: title ? title : userFound.title,
+              content: content ? content : userFound.content,
+            })
               .then(function () {
                 done(userAdmin);
               })
