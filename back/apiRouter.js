@@ -4,6 +4,7 @@ var usersCtrl = require("./routes/usersCtrl");
 var messagesCtrl = require("./routes/messagesCtrl");
 var likesCtrl = require("./routes/likesCtrl");
 var commentCtrl = require("./routes/commentCtrl");
+const AdminCtrl = require("./routes/AdminCtrl");
 
 // Router
 exports.router = (function () {
@@ -35,6 +36,9 @@ exports.router = (function () {
   apiRouter
     .route("/messages/:messageId/comment/:commentId/")
     .put(commentCtrl.updateComment);
+
+  // Route Admin
+  apiRouter.route("/admin/:messageId/").put(AdminCtrl.adminUpdateMessages);
 
   return apiRouter;
 })();
