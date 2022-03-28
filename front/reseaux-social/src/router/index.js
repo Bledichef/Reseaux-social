@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue";
 import Connexion from "@/views/Connexion.vue";
 import Enregistrer from "@/views/Enregistrer.vue";
 import NotFound from "@/views/NotFound.vue";
+import Profile from "@/views/Profile";
 
 const routes = [
   {
@@ -16,18 +17,29 @@ const routes = [
   },
   {
     name: "Connexion",
-    path: "/Connexion",
+    path: "/Connexion/",
     component: Connexion,
+    props: true,
     meta: {
-      title: "A propos",
+      title: "Connexion",
     },
   },
   {
     name: "Enregistrer",
-    path: "/Enregistrer",
+    path: "/Enregistrer/:name",
     component: Enregistrer,
+    props: true,
     meta: {
       title: "Enregistrer",
+    },
+  },
+  {
+    name: "Profile",
+    path: "/Profile",
+    component: Profile,
+    props: true,
+    meta: {
+      title: "Profile",
     },
   },
   {

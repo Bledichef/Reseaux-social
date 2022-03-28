@@ -1,3 +1,9 @@
 <template>
-  <p>Enregistrer</p>
+  <p>{{ name }}</p>
 </template>
+<script>
+export default {
+  name: "Enregistrer",
+  props: ["name"],
+};
+</script>

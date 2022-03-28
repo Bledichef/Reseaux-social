@@ -1,17 +1,16 @@
 <template>
   <router-link to="/">Home</router-link> |
   <router-link to="/Connexion">Connexion</router-link> |
-  <router-link to="/Enregistrer">Enregistrer </router-link>
+  <router-link :to="{ name: 'Enregistrer', params: { name: 'Enregistrer' } }"
+    >Enregistrer
+  </router-link>
   |
+  <router-link to="/Profile">Profil </router-link>
 </template>
 <script>
 export default {
   name: "App",
-  methods: {
-    goToProduct3: function () {
-      this.$router.push({ name: "Product", params: { name: "Roller" } });
-    },
-  },
+  methods: {},
 };
 </script>
 

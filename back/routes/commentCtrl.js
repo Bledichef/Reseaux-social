@@ -100,7 +100,7 @@ module.exports = {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
     var userId = jwtUtils.getUserId(headerAuth);
-
+    var isAdmin = jwtUtils.getAdmin(headerAuth);
     // Params
     var content = req.body.content;
 
@@ -108,9 +108,10 @@ module.exports = {
       [
         function (done) {
           models.Comment.findOne({
-            attributes: ["id", "content", "userId"],
+            attributes: ["id", "content", "userId", "isAdmin"],
             where: { id: userId },
           })
+
             .then(function (userFound) {
               done(null, userFound);
             })
