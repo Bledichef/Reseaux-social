@@ -3,6 +3,7 @@
 var models = require("../models");
 var asynclib = require("async");
 var jwtUtils = require("../utils/jwt.utils");
+const message = require("../models/message");
 
 // Routes
 module.exports = {
@@ -108,7 +109,47 @@ module.exports = {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
     var userId = jwtUtils.getUserId(headerAuth);
+    var isAdmin = jwtUtils.getAdmin(headerAuth);
 
+    // Params
+    var title = req.body.title;
+    var content = req.body.content;
+
+    models.User.findOne({
+      attributes: ["id"],
+      where: { id: userId },
+    })
+      .then(() => {
+        try {
+          const message = models.Message.findOne({
+            attributes: ["userId", "title", "content"],
+            where: { Userid: id },
+          });
+          if (models.User.Id === message.userId || isAdmin === true) {
+            /* updateOne({
+              title: title ? title : message.title,
+              content: content ? content : message.content,
+            });*/
+            console.log("ok");
+          } else {
+            console.log(
+              "identifiant utilisateur ne correspond pas au userId du message"
+            );
+          }
+        } catch (error) {
+          return console.log("utilisateur pas proprietaire du message");
+        }
+      })
+      .catch(function (error) {
+        console.log("identifiant non trouvé ");
+      });
+  },
+
+  /* updateMessages: function (req, res) {
+    // Getting auth header
+    var headerAuth = req.headers["authorization"];
+    var userId = jwtUtils.getUserId(headerAuth);
+    var isAdmin = jwtUtils.getAdmin(headerAuth);
     // Params
     var title = req.body.title;
     var content = req.body.content;
@@ -159,5 +200,5 @@ module.exports = {
         }
       }
     );
-  },
+  },*/
 };
