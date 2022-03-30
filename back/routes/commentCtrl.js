@@ -95,8 +95,40 @@ module.exports = {
         res.status(500).json({ error: "Champs invalide" });
       });
   },
+  updateComment: function (req, res, next) {
+    // Getting auth header
+    var headerAuth = req.headers["authorization"];
+    var userId = jwtUtils.getUserId(headerAuth);
+    var isAdmin = jwtUtils.getAdmin(headerAuth);
 
-  updateComment: function (req, res) {
+    // Params
+    let title = req.body.title;
+    let content = req.body.content;
+
+    models.Message.findOne({
+      include: models.User,
+      where: { id: req.params.commentId },
+    })
+      .then(function (commentFound) {
+        if (isAdmin === true || commentFound.UserId === userId) {
+          commentFound.updateOne({
+            content: content,
+          });
+          commentFound
+            .save()
+            .then(res.status(201).json({ message: "Mise à jour effectué." }));
+        } else {
+          res.status(403).json({
+            message: "Vous n'êtes pas autorisé à effectuer cette requête.",
+          });
+        }
+      })
+      .catch(function (err) {
+        res.status(400).json(console.log(err));
+      });
+  },
+
+  /* updateComment: function (req, res) {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
     var userId = jwtUtils.getUserId(headerAuth);
@@ -156,5 +188,5 @@ module.exports = {
   updateCommentAdmin: function (req, res) {
     // Params
     var content = req.body.content;
-  },
+  },*/
 };

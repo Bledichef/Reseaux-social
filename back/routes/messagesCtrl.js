@@ -115,35 +115,28 @@ module.exports = {
     let title = req.body.title;
     let content = req.body.content;
 
-    /*  models.User.findOne({
-      where: { id: userId },
-    }).then(function (user) {
-      console.log(req.params.messageId);
-      if (user) {*/
     models.Message.findOne({
       include: models.User,
       where: { id: req.params.messageId },
     })
       .then(function (messageFound) {
-        if (isAdmin === true || messageFound.UserId === userId) messageFound;
-
-        messageFound.set({
-          title: title,
-          content: content,
-        });
-        messageFound
-          .save()
-          .then(res.status(201).json({ message: "Mise à jour effectué." }));
+        if (isAdmin === true || messageFound.UserId === userId) {
+          messageFound.set({
+            title: title,
+            content: content,
+          });
+          messageFound
+            .save()
+            .then(res.status(201).json({ message: "Mise à jour effectué." }));
+        } else {
+          res.status(403).json({
+            message: "Vous n'êtes pas autorisé à effectuer cette requête.",
+          });
+        }
       })
       .catch(function (err) {
         res.status(400).json(console.log(err));
       });
-    /* } else {
-        res.status(403).json({
-          message: "Vous n'êtes pas autorisé à effectuer cette requête.",
-        });
-      }
-    });*/
   },
   /* updateMessages: function (req, res) {
     // Getting auth header
