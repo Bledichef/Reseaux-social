@@ -105,46 +105,46 @@ module.exports = {
       });
   },
 
-  updateMessages: function (req, res) {
+  updateMessages: function (req, res, next) {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
     var userId = jwtUtils.getUserId(headerAuth);
     var isAdmin = jwtUtils.getAdmin(headerAuth);
 
     // Params
-    var title = req.body.title;
-    var content = req.body.content;
+    let title = req.body.title;
+    let content = req.body.content;
 
-    models.User.findOne({
-      attributes: ["id"],
+    /*  models.User.findOne({
       where: { id: userId },
+    }).then(function (user) {
+      console.log(req.params.messageId);
+      if (user) {*/
+    models.Message.findOne({
+      include: models.User,
+      where: { id: req.params.messageId },
     })
-      .then(() => {
-        try {
-          const message = models.Message.findOne({
-            attributes: ["userId", "title", "content"],
-            where: { Userid: id },
-          });
-          if (models.User.Id === message.userId || isAdmin === true) {
-            /* updateOne({
-              title: title ? title : message.title,
-              content: content ? content : message.content,
-            });*/
-            console.log("ok");
-          } else {
-            console.log(
-              "identifiant utilisateur ne correspond pas au userId du message"
-            );
-          }
-        } catch (error) {
-          return console.log("utilisateur pas proprietaire du message");
-        }
-      })
-      .catch(function (error) {
-        console.log("identifiant non trouvé ");
-      });
-  },
+      .then(function (messageFound) {
+        if (isAdmin === true || messageFound.UserId === userId) messageFound;
 
+        messageFound.set({
+          title: title,
+          content: content,
+        });
+        messageFound
+          .save()
+          .then(res.status(201).json({ message: "Mise à jour effectué." }));
+      })
+      .catch(function (err) {
+        res.status(400).json(console.log(err));
+      });
+    /* } else {
+        res.status(403).json({
+          message: "Vous n'êtes pas autorisé à effectuer cette requête.",
+        });
+      }
+    });*/
+  },
   /* updateMessages: function (req, res) {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
@@ -156,38 +156,48 @@ module.exports = {
 
     asynclib.waterfall(
       [
-        function (done) {
-          models.Message.findOne({
-            attributes: ["id", "title", "content"],
+        function (user, done) {
+          models.User.findOne({
             where: { id: userId },
-          })
-            .then(function (userFound) {
-              done(null, userFound);
-            })
-            .catch(function (err) {
-              return res
-                .status(500)
-                .json({ error: "Impossible de verifier Utilisateur" });
-            });
-        },
-        function (userFound, done) {
-          if (userFound) {
-            userFound
-              .update({
-                title: title ? title : userFound.title,
-                content: content ? content : userFound.content,
+          }).then(
+            function (user, done) {
+              models.Message.findOne({
+                attributes: ["id", "userId", "title", "content"],
+                include: models.User,
+                where: { userId: user.id },
               })
-              .then(function () {
-                done(userFound);
-              })
-              .catch(function (err) {
-                res
-                  .status(500)
-                  .json({ error: "Impossible de modifier le message" });
-              });
-          } else {
-            res.status(404).json({ error: "Utilisateur inexistant2" });
-          }
+                .then(function (user) {
+                  done(null, user);
+                })
+                .catch(function (err) {
+                  return res
+                    .status(500)
+                    .json({ error: "Impossible de verifier Utilisateur" });
+                });
+              console.log(user.id);
+              console.log(userId);
+              console.log(user);
+            },
+            function (userFound, done) {
+              if (user) {
+                user
+                  .update({
+                    title: title ? title : message.title,
+                    content: content ? content : message.content,
+                  })
+                  .then(function () {
+                    done(user);
+                  })
+                  .catch(function (err) {
+                    res
+                      .status(500)
+                      .json({ error: "Impossible de modifier le message" });
+                  });
+              } else {
+                res.status(404).json({ error: "Utilisateur inexistant2" });
+              }
+            }
+          );
         },
       ],
       function (userFound) {
@@ -195,6 +205,7 @@ module.exports = {
           return res.status(201).json(userFound);
         } else {
           return res
+
             .status(500)
             .json({ error: "Modification du message impossible " });
         }
