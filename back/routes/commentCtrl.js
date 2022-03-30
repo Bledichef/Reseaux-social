@@ -105,13 +105,14 @@ module.exports = {
     let title = req.body.title;
     let content = req.body.content;
 
-    models.Message.findOne({
+    models.Comment.findOne({
       include: models.User,
       where: { id: req.params.commentId },
     })
       .then(function (commentFound) {
+        // console.log(commentFound);
         if (isAdmin === true || commentFound.UserId === userId) {
-          commentFound.updateOne({
+          commentFound.update({
             content: content,
           });
           commentFound
