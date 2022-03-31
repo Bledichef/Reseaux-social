@@ -11,6 +11,7 @@ const routes = [
     name: "Home",
     path: "/",
     component: Home,
+    props: true,
     meta: {
       title: "Accueil",
     },

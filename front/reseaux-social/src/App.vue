@@ -1,11 +1,17 @@
 <template>
-  <router-link to="/">Home</router-link> |
-  <router-link to="/Connexion">Connexion</router-link> |
-  <router-link :to="{ name: 'Enregistrer', params: { name: 'Enregistrer' } }"
-    >Enregistrer
-  </router-link>
-  |
-  <router-link to="/Profile">Profil </router-link>
+  <nav>
+    <!-- <img src="./assets/logoReseau.png" /> -->
+    <router-link to="/">Home</router-link> |
+    <router-link to="/Connexion">Connexion</router-link> |
+    <router-link to="/Enregistrer">Enregistrer</router-link> |
+    <router-link to="/Profile">Profil</router-link> |
+    <!-- <router-link :to="{ name: 'Enregistrer', params: { name: 'Enregistrer' } }" -->
+    <!-- >Enregistrer -->
+    <!-- </router-link> -->
+    <!-- | -->
+    <!-- <router-link to="/Profile">Profil </router-link> -->
+  </nav>
+  <router-view />
 </template>
 <script>
 export default {
