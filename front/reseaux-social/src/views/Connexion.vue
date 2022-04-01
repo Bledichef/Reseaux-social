@@ -13,23 +13,49 @@
     <span class="card__action" @click="switchToLogin()">Se connecter</span>
   </p>
   <div class="form_input">
-    <input class="form-row" type="text" placeholder="Adresse mail" />
     <input
+      v-model="email"
+      class="form-row"
+      type="text"
+      placeholder="Adresse mail"
+    />
+    <input
+      v-model="username"
       class="form-row"
       v-if="mode == 'create'"
       type="text"
       placeholder="Nom et prénom"
     />
-    <input class="form-row" type="text" placeholder="Mot de passe" />
     <input
+      v-model="password"
+      class="form-row"
+      type="text"
+      placeholder="Mot de passe"
+    />
+    <input
+      v-model="job"
       class="form-row"
       v-if="mode == 'create'"
       type="text"
       placeholder="Emploi"
     />
   </div>
-  <button class="button" v-if="mode == 'create'">Enregistrer</button>
-  <button class="button" v-else>Connections</button>
+  <button
+    @click="login()"
+    class="button"
+    :class="{ 'button--disabled': !validatedFields }"
+    v-if="mode == 'login'"
+  >
+    <span>Connexion</span>
+  </button>
+  <button
+    @click="createAccount()"
+    class="button"
+    :class="{ 'button--disabled': !validatedFields }"
+    v-if="mode == 'create'"
+  >
+    <span>Créer mon compte</span>
+  </button>
 </template>
 
 <script>
@@ -38,7 +64,33 @@ export default {
   data: function () {
     return {
       mode: "login",
+      email: "",
+      username: "",
+      password: "",
+      job: "",
     };
+  },
+  computed: {
+    validatedFields: function () {
+      if (this.mode == "create") {
+        if (
+          this.email != "" &&
+          this.username != "" &&
+          this.password != "" &&
+          this.job != ""
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (this.email != "" && this.password != "") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
   },
   methods: {
     switchToCreateAccount: function () {
@@ -47,10 +99,30 @@ export default {
     switchToLogin: function () {
       this.mode = "login";
     },
+    createAccount: function () {
+      console.log(this.email, this.username, this.password, this.job);
+      this.$store
+        .dispatch("createAccount", {
+          email: this.email,
+          username: this.username,
+          password: this.password,
+          job: this.job,
+        })
+        .then(function (response) {
+          console.log(response);
+        }),
+        function (error) {
+          console.log(error);
+        };
+    },
   },
 };
 </script>
 <style>
+body {
+  background-color: rgba(30, 41, 104, 0.774);
+  /* text-emphasis-color: #087ef5; */
+}
 .form_input {
   display: flex;
   flex-flow: column;
