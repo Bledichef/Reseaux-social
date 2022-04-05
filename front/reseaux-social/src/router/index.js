@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory } from "vue-router";
 
 import Home from "@/views/Home.vue";
 import Connexion from "@/views/Connexion.vue";
-import Enregistrer from "@/views/Enregistrer.vue";
 import NotFound from "@/views/NotFound.vue";
 import Profile from "@/views/Profile";
 
@@ -25,15 +24,7 @@ const routes = [
       title: "Connexion",
     },
   },
-  {
-    name: "Enregistrer",
-    path: "/Enregistrer/:name",
-    component: Enregistrer,
-    props: true,
-    meta: {
-      title: "Enregistrer",
-    },
-  },
+
   {
     name: "Profile",
     path: "/Profile",

@@ -46,19 +46,23 @@
     :class="{ 'button--disabled': !validatedFields }"
     v-if="mode == 'login'"
   >
-    <span>Connexion</span>
+    <span v-if="status == 'loading'">Connexion en cours...</span>
+    <span v-else>Connexion</span>
   </button>
   <button
     @click="createAccount()"
     class="button"
     :class="{ 'button--disabled': !validatedFields }"
-    v-if="mode == 'create'"
+    v-else
   >
-    <span>Créer mon compte</span>
+    <span v-if="status == 'loading'">Création en cours...</span>
+    <span v-else>Créer mon compte</span>
   </button>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "login",
   data: function () {
@@ -91,6 +95,7 @@ export default {
         }
       }
     },
+    ...mapState(["status"]),
   },
   methods: {
     switchToCreateAccount: function () {
@@ -99,7 +104,24 @@ export default {
     switchToLogin: function () {
       this.mode = "login";
     },
+    login: function () {
+      const self = this;
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(function (response) {
+          self.$router.push("/Profile");
+          console.log(response);
+        }),
+        function (error) {
+          console.log(error);
+        };
+    },
+
     createAccount: function () {
+      const self = this;
       console.log(this.email, this.username, this.password, this.job);
       this.$store
         .dispatch("createAccount", {
@@ -110,6 +132,7 @@ export default {
         })
         .then(function (response) {
           console.log(response);
+          self.login();
         }),
         function (error) {
           console.log(error);
