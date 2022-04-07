@@ -51,6 +51,18 @@ const store = createStore({
       };
       localStorage.removeItem("user");
     },
+    updateUser: function (state, user) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+      localStorage.setItem("user", JSON.stringify(user));
+      state.user = user;
+    },
+    deleteUser: function (state, userInfos) {
+      console.log(user);
+      console.log(userInfos);
+      instance.defaults.headers.common["Authorization"] = user.token;
+      state.userInfos = userInfos;
+      localStorage.removeItem("user");
+    },
   },
   actions: {
     createAccount: ({ commit }, userInfos) => {
@@ -98,6 +110,44 @@ const store = createStore({
           commit("userInfos", response.data);
         })
         .catch(function () {});
+    },
+    updateUser: ({ commit }, userInfos) => {
+      commit("userInfos");
+      return new Promise((resolve, reject) => {
+        commit;
+        console.log(userInfos);
+        instance
+          .put("http://localhost:8080/api/users/me", userInfos)
+          .then(function (response) {
+            commit("setStatus", "");
+            commit("logUser", response.data);
+            resolve(response);
+            console.log(response);
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    deleteUser: ({ commit }, userInfos) => {
+      commit("userInfos");
+      return new Promise((resolve, reject) => {
+        commit;
+        instance
+          .delete("http://localhost:8080/api/users/me", userInfos)
+          .then(function (response) {
+            commit("logUser", response.data);
+            resolve(response);
+            console.log(response);
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
     },
   },
 });

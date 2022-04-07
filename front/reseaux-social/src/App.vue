@@ -1,5 +1,8 @@
 <template>
   <nav>
+    <header>
+      <img class="logo" alt=" logo" src="./assets/logoReseau.png" />
+    </header>
     <!-- <img src="./assets/logoReseau.png" /> -->
     <router-link to="/">Home</router-link> |
     <router-link to="/Connexion">Connexion</router-link> |
@@ -36,5 +39,9 @@ a {
 .router-link-active {
   font-weight: bold;
   color: blueviolet;
+}
+.logo {
+  max-width: 25%;
+  max-height: 5%;
 }
 </style>
