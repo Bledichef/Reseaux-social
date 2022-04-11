@@ -27,8 +27,9 @@ import { mapState, Store } from "vuex";
 export default {
   name: "Profile",
   mounted: function () {
+    console.log(localStorage.user);
     console.log(this.$store.state.user);
-    if (this.$store.state.user.userId == -1) {
+    if (localStorage.userId == -1) {
       this.$router.push("/");
       return;
     }
@@ -64,12 +65,12 @@ export default {
         })
         .then(function (response) {
           console.log(response);
-          this.store.self.getUserInfos();
+          getUserInfos();
         }),
         function (error) {
           console.log(error);
         };
-      this.$router.push("/Profile/");
+      this.$router.push("/Connexion/");
     },
     deleteAccount: function () {
       this.$store.commit("deleteUser");
