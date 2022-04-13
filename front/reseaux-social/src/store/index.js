@@ -63,6 +63,10 @@ const store = createStore({
       state.userInfos = userInfos;
       localStorage.removeItem("user");
     },
+    postMessage: function (state, userInfos) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+      state.userInfos = userInfos;
+    },
   },
   actions: {
     createAccount: ({ commit }, userInfos) => {
@@ -141,6 +145,26 @@ const store = createStore({
             commit("logUser", response.data);
             resolve(response);
             console.log(response);
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    postMessage: ({ commit }, userInfos, message) => {
+      commit("message");
+      return new Promise((resolve, reject) => {
+        commit;
+        instance
+          .post("http://localhost:8080/api/messages/new", userInfos, message)
+          .then(function (response) {
+            commit(response.data);
+            resolve(response);
+            console.log(response);
+            console.log(this.title);
+            console.log(this.content);
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");

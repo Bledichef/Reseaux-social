@@ -28,7 +28,7 @@ export default {
   name: "Profile",
   mounted: function () {
     console.log(localStorage.user);
-    console.log(this.$store.state.user);
+    // console.log(this.$store.state.user);
     if (localStorage.userId == -1) {
       this.$router.push("/");
       return;
