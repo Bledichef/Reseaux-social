@@ -25,6 +25,25 @@
 
     <div class="card-body" v-for="Message in messages" :key="Message">
       <div class="Title-message">Titre message {{ Message.title }}</div>
+      <button @click="switchToModifyMessage()" class="button">Modifié</button>
+      <input
+        v-model="title_modify"
+        v-if="mode == 'modifyMessage'"
+        class="form-row"
+        type="text"
+        placeholder="Titre modifié"
+      />
+      <input
+        v-model="content_modify"
+        v-if="mode == 'modifyMessage'"
+        class="form-row"
+        type="text"
+        placeholder="contenu modifié"
+      />
+      <button v-if="mode == 'modifyMessage'" @click="updateMessages()">
+        Poster
+      </button>
+      id du message => {{ Message.id }}
       <div class="content">Contenu du message {{ Message.content }}</div>
       <div class="User">Createur du message => {{ Message.UserId }}</div>
       <div class="creation">date création {{ Message.createdAt }}</div>
@@ -33,7 +52,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-
 import { computed } from "@vue/runtime-core";
 
 export default {
@@ -64,17 +82,35 @@ export default {
     switchToCreateMessage: function () {
       this.mode = "createMessage";
     },
+    switchToModifyMessage: function () {
+      this.mode = "modifyMessage";
+    },
     createMessage: function () {
       this.$store
         .dispatch("postMessage", {
           title: this.title,
           content: this.content,
         })
+
         .then(function (response) {
-          console.log(this.title);
-          console.log(this.content);
           console.log(response);
-          createMessage();
+          // window.location.reload;
+        }),
+        function (error) {
+          console.log(error);
+        };
+      window.location.reload;
+      this.$router.reload("/");
+    },
+    updateMessages: function () {
+      this.$store
+        .dispatch("updateMessage", {
+          title: this.title_modify,
+          content: this.content_modify,
+        })
+        .then(function (response) {
+          console.log(response);
+          window.location.reload;
         }),
         function (error) {
           console.log(error);

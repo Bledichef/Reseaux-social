@@ -1,7 +1,8 @@
 import { createStore } from "vuex";
 
 const axios = require("axios");
-
+const EMAIL_REGEX =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const instance = axios.create({
   baseUrl: "http://localhost:8080/api/users/",
 });
@@ -64,6 +65,10 @@ const store = createStore({
       localStorage.removeItem("user");
     },
     postMessage: function (state, userInfos) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+      state.userInfos = userInfos;
+    },
+    updateMessage: function (state, userInfos) {
       instance.defaults.headers.common["Authorization"] = user.token;
       state.userInfos = userInfos;
     },
@@ -163,8 +168,24 @@ const store = createStore({
             commit(response.data);
             resolve(response);
             console.log(response);
-            console.log(this.title);
-            console.log(this.content);
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    updateMessage: ({ commit }, userInfos, message) => {
+      commit("message");
+      return new Promise((resolve, reject) => {
+        commit;
+        instance
+          .put("http://localhost:8080/api/messages/1", userInfos, message)
+          .then(function (response) {
+            commit(response.data);
+            resolve(response);
+            console.log(response);
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");
