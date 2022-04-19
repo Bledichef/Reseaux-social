@@ -1,8 +1,7 @@
 import { createStore } from "vuex";
 
 const axios = require("axios");
-const EMAIL_REGEX =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const instance = axios.create({
   baseUrl: "http://localhost:8080/api/users/",
 });
@@ -52,18 +51,18 @@ const store = createStore({
       };
       localStorage.removeItem("user");
     },
+    deleteUser: function (state, userInfos) {
+      console.log(userInfos);
+      instance.defaults.headers.common["Authorization"] = user.token;
+      localStorage.setItem("user", JSON.stringify(user));
+      state.userInfos = userInfos;
+    },
     updateUser: function (state, user) {
       instance.defaults.headers.common["Authorization"] = user.token;
       localStorage.setItem("user", JSON.stringify(user));
       state.user = user;
     },
-    deleteUser: function (state, userInfos) {
-      console.log(user);
-      console.log(userInfos);
-      instance.defaults.headers.common["Authorization"] = user.token;
-      state.userInfos = userInfos;
-      localStorage.removeItem("user");
-    },
+
     postMessage: function (state, userInfos) {
       instance.defaults.headers.common["Authorization"] = user.token;
       state.userInfos = userInfos;
@@ -144,9 +143,11 @@ const store = createStore({
       commit("userInfos");
       return new Promise((resolve, reject) => {
         commit;
+        console.log(userInfos);
         instance
           .delete("http://localhost:8080/api/users/me", userInfos)
           .then(function (response) {
+            commit("setStatus", "");
             commit("logUser", response.data);
             resolve(response);
             console.log(response);
@@ -181,7 +182,7 @@ const store = createStore({
       return new Promise((resolve, reject) => {
         commit;
         instance
-          .put("http://localhost:8080/api/messages/1", userInfos, message)
+          .put("http://localhost:8080/api/messages/", userInfos, message)
           .then(function (response) {
             commit(response.data);
             resolve(response);

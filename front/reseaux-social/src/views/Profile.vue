@@ -73,7 +73,12 @@ export default {
       this.$router.push("/Connexion/");
     },
     deleteAccount: function () {
-      this.$store.commit("deleteUser");
+      this.$store.push("deleteUser").then(function (response) {
+        console.log(response);
+      }),
+        function (error) {
+          console.log(error);
+        };
       this.$router.push("/Connexion/");
     },
   },

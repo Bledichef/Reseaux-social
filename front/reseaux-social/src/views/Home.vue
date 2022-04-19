@@ -46,6 +46,12 @@
       id du message => {{ Message.id }}
       <div class="content">Contenu du message {{ Message.content }}</div>
       <div class="User">Createur du message => {{ Message.UserId }}</div>
+      <div class="like">
+        like =>
+        <!-- <font-awesome-icon icon="fa-solid fa-heart" /> -->
+        <font-awesome-icon icon="fa-solid fa-user-secret" />
+        {{ Message.likes }}
+      </div>
       <div class="creation">date création {{ Message.createdAt }}</div>
     </div>
   </div>
@@ -53,6 +59,10 @@
 <script>
 import { mapState } from "vuex";
 import { computed } from "@vue/runtime-core";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faUserSecret);
 
 export default {
   name: "Home",
@@ -99,8 +109,9 @@ export default {
         function (error) {
           console.log(error);
         };
-      window.location.reload;
-      this.$router.reload("/");
+      window.location = `/Users/moi_b/OneDrive/Bureau/api%20rest/front/reseaux-social/dist/index.html#/`;
+      // window.location.reload;
+      // this.$router.reload("/");
     },
     updateMessages: function () {
       this.$store
@@ -122,7 +133,11 @@ computed: {
 }
 </script>
 <style>
+.messages {
+  display: inline-block;
+}
 .card-body {
+  border-radius: 50px;
   background-color: antiquewhite;
   margin-block-end: 30px;
   margin-block-start: 20px;

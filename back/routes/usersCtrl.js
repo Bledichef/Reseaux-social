@@ -236,63 +236,79 @@ module.exports = {
       }
     );
   },
-  deleteUserProfile: function (req, res) {
+  /*deleteUserProfile: function (req, res) {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
     var userId = jwtUtils.getUserId(headerAuth);
 
-    // Params
-    var job = req.body.job;
+    // console.log(userId);
+    asynclib.waterfall([
+      function (done) {
+        models.User.findOne({
+          attributes: ["id"],
+          where: { id: userId },
+        })
 
-    var username = req.body.username;
-
-    console.log(job);
-
-    asynclib.waterfall(
-      [
-        function (done) {
-          models.User.findOne({
-            attributes: ["id", "email", "username", "job"],
-            where: { id: userId },
+          .then(function (userFound) {
+            done(null, userFound);
           })
-            .then(function (userFound) {
-              done(null, userFound);
+          .catch(function (err) {
+            return res
+              .status(500)
+
+              .json({ error: "Impossible de verifier Utilisateur1" });
+          });
+      },
+      function (userFound, done) {
+        if (userFound) {
+          userFound
+            .destroy(userFound.id)
+
+            .then(function () {
+              done();
             })
             .catch(function (err) {
-              return res
+              res
                 .status(500)
-                .json({ error: "Impossible de verifier Utilisateur" });
+                .json({ error: "Impossible de supprimer l'utilisateur2" });
             });
-        },
-        function (userFound, done) {
-          if (userFound) {
-            userFound
-
-              .destroy({
-                where: userFound,
-              })
-              .then(function () {
-                done(userFound);
-              })
-              .catch(function (err) {
-                res
-                  .status(500)
-                  .json({ error: "Impossible de supprimer l'utilisateur" });
-              });
-          } else {
-            res.status(404).json({ error: "Utilisateur inexistant2" });
-          }
-        },
-      ],
-      function (userFound) {
-        if (userFound) {
-          return res.status(201).json(userFound);
         } else {
-          return res
-            .status(500)
-            .json({ error: "suppression du profile impossible " });
+          res.status(404).json({ error: "Utilisateur inexistant2" });
         }
-      }
-    );
+      },
+    ]);
+  },*/
+  //supprime de la db l'utilisateur
+  deleteUserProfile: (req, res) => {
+    // Getting auth header
+    var headerAuth = req.headers["authorization"];
+    var userId = jwtUtils.getUserId(headerAuth);
+    //on cherche l'user qu'on envoie dans les paramètres de la requete -> user
+    models.User.findOne({
+      where: { id: userId },
+    })
+      .then((user) => {
+        //si celui qui a fait cet user est le même que celui qui veut faire la requête = on supprime l'user ciblé dans les paramètres
+        if (user.id === userId) {
+          models.User.destroy({
+            where: { id: userId },
+          })
+            .then(() =>
+              res.status(200).json({ message: "Utilisateur supprimé" })
+            )
+            .catch((error) => res.status(403).json({ error }));
+        } else {
+          res.status(404).json({
+            message:
+              "Vous n'avez pas l'autorisation de supprimer un autre utilisateur",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return res
+          .status(400)
+          .json({ message: "Cet utilisateur n'existe pas" });
+      });
   },
 };
