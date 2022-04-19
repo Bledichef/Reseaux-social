@@ -49,8 +49,8 @@
       <div class="like">
         like =>
         <!-- <font-awesome-icon icon="fa-solid fa-heart" /> -->
-        <i class="fa-solid fa-heart"></i>
-        <i class="fa-regular fa-heart"></i>
+        <i v-if="Message.likes > '0'" class="fa-solid fa-heart"></i>
+        <i v-if="Message.likes <= '0'" class="fa-regular fa-heart"></i>
 
         {{ Message.likes }}
       </div>

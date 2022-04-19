@@ -8,8 +8,12 @@
   </p>
 
   <div class="form-row">
-    <button @click="logout()" class="button">Déconnexion</button>
-    <button class="button" @click="switchToUpdate()">Modifié Compte</button>
+    <button @click="logout()" class="button">
+      <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+    </button>
+    <button class="button" @click="switchToUpdate()">
+      <i class="fa-solid fa-pen-to-square"></i> Modifié Compte
+    </button>
     <div class="upadte_user" v-if="mode == 'update'">
       <input v-model="username" type="text" placeholder="Nom et prenom" />
       <input v-model="job" class="form-row" type="text" placeholder="Emploi" />
@@ -17,7 +21,10 @@
         Enregistrer les modifications
       </button>
     </div>
-    <button class="button" @click="deleteAccount()">Supprimé Compte</button>
+
+    <button class="button" @click="deleteAccount()">
+      <i class="fa-solid fa-trash"></i> Supprimé Compte
+    </button>
   </div>
 </template>
 
