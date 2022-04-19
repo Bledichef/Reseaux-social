@@ -49,7 +49,9 @@
       <div class="like">
         like =>
         <!-- <font-awesome-icon icon="fa-solid fa-heart" /> -->
-        <font-awesome-icon icon="fa-solid fa-user-secret" />
+        <i class="fa-solid fa-heart"></i>
+        <i class="fa-regular fa-heart"></i>
+
         {{ Message.likes }}
       </div>
       <div class="creation">date création {{ Message.createdAt }}</div>
@@ -59,10 +61,6 @@
 <script>
 import { mapState } from "vuex";
 import { computed } from "@vue/runtime-core";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUserSecret } from "@fortawesome/free-solid-svg-icons";
-
-library.add(faUserSecret);
 
 export default {
   name: "Home",
@@ -141,5 +139,8 @@ computed: {
   background-color: antiquewhite;
   margin-block-end: 30px;
   margin-block-start: 20px;
+}
+.fa-solid {
+  width: 200%;
 }
 </style>
