@@ -177,12 +177,17 @@ const store = createStore({
           });
       });
     },
-    updateMessage: ({ commit }, userInfos, message) => {
+    updateMessage: ({ commit }, userInfos, Messageid) => {
       commit("message");
       return new Promise((resolve, reject) => {
+        console.log(Messageid);
         commit;
         instance
-          .put("http://localhost:8080/api/messages/", userInfos, message)
+          .put(
+            `$http://localhost:8080/api/messages/${Messageid}`,
+            userInfos,
+            Messageid
+          )
           .then(function (response) {
             commit(response.data);
             resolve(response);

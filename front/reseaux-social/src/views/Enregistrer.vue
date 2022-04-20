@@ -1,5 +1,6 @@
 <template>
-  <p>{{ name }}</p>
+  <p>Votre message est Poster</p>
+  <router-link to="/">Home</router-link>
 </template>
 <script>
 export default {

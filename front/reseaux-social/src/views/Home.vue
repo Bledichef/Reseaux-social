@@ -23,26 +23,31 @@
       Poster
     </button>
 
-    <div class="card-body" v-for="Message in messages" :key="Message">
+    <div class="card-body" v-for="Message in messages" :key="Message.id">
       <div class="Title-message">Titre message {{ Message.title }}</div>
-      <button @click="switchToModifyMessage()" class="button">Modifié</button>
-      <input
-        v-model="title_modify"
-        v-if="mode == 'modifyMessage'"
-        class="form-row"
-        type="text"
-        placeholder="Titre modifié"
-      />
-      <input
-        v-model="content_modify"
-        v-if="mode == 'modifyMessage'"
-        class="form-row"
-        type="text"
-        placeholder="contenu modifié"
-      />
-      <button v-if="mode == 'modifyMessage'" @click="updateMessages()">
-        Poster
-      </button>
+      <div class="modify">
+        <button @click="switchToModifyMessage()" class="button">Modifié</button>
+        <input
+          v-model="title_modify"
+          v-if="mode == 'modifyMessage'"
+          class="form-row"
+          type="text"
+          placeholder="Titre modifié"
+        />
+        <input
+          v-model="content_modify"
+          v-if="mode == 'modifyMessage'"
+          class="form-row"
+          type="text"
+          placeholder="contenu modifié"
+        />
+        <button
+          v-if="mode == 'modifyMessage'"
+          @click="updateMessages(Message.id)"
+        >
+          Poster
+        </button>
+      </div>
       id du message => {{ Message.id }}
       <div class="content">Contenu du message {{ Message.content }}</div>
       <div class="User">Createur du message => {{ Message.UserId }}</div>
@@ -52,7 +57,11 @@
         <i v-if="Message.likes > '0'" class="fa-solid fa-heart"></i>
         <i v-if="Message.likes <= '0'" class="fa-regular fa-heart"></i>
 
+        <i class="fa-solid fa-thumbs-up"></i>
+
         {{ Message.likes }}
+
+        <i class="fa-solid fa-thumbs-down"></i>
       </div>
       <div class="creation">date création {{ Message.createdAt }}</div>
     </div>
@@ -61,6 +70,7 @@
 <script>
 import { mapState } from "vuex";
 import { computed } from "@vue/runtime-core";
+import router from "@/router";
 
 export default {
   name: "Home",
@@ -107,15 +117,19 @@ export default {
         function (error) {
           console.log(error);
         };
-      window.location = `/Users/moi_b/OneDrive/Bureau/api%20rest/front/reseaux-social/dist/index.html#/`;
+      // window.location = `/Users/moi_b/OneDrive/Bureau/api%20rest/front/reseaux-social/dist/index.html#/`;
+      this.$router.push("/Enregistrer");
       // window.location.reload;
-      // this.$router.reload("/");
+      // this.$router.reload("/Enregistrer/");
     },
-    updateMessages: function () {
+    updateMessages: function (Messageid) {
+      console.log(Messageid);
+
       this.$store
-        .dispatch("updateMessage", {
+        .dispatch("updateMessage", Messageid, {
           title: this.title_modify,
           content: this.content_modify,
+          Messageid: Messageid,
         })
         .then(function (response) {
           console.log(response);

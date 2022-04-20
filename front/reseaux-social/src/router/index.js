@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue";
 import Connexion from "@/views/Connexion.vue";
 import NotFound from "@/views/NotFound.vue";
 import Profile from "@/views/Profile";
+import Enregistrer from "@/views/Enregistrer";
 
 const routes = [
   {
@@ -24,7 +25,15 @@ const routes = [
       title: "Connexion",
     },
   },
-
+  {
+    name: "Enregistrer",
+    path: "/Enregistrer/",
+    component: Enregistrer,
+    props: true,
+    meta: {
+      title: "Enregistrer",
+    },
+  },
   {
     name: "Profile",
     path: "/Profile",

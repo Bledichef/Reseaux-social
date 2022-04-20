@@ -17,8 +17,4 @@ import router from "./router";
 import store from "./store";
 createApp(App).use(router).use(store).mount("#app");
 
-App.component("font-awesome-icon", FontAwesomeIcon);
-
 // add necessary dependencies...
-
-App.mount("#app");
