@@ -53,15 +53,22 @@
       <div class="User">Createur du message => {{ Message.UserId }}</div>
       <div class="like">
         like =>
-        <!-- <font-awesome-icon icon="fa-solid fa-heart" /> -->
+
         <i v-if="Message.likes > '0'" class="fa-solid fa-heart"></i>
         <i v-if="Message.likes <= '0'" class="fa-regular fa-heart"></i>
-
-        <i class="fa-solid fa-thumbs-up"></i>
-
-        {{ Message.likes }}
-
-        <i class="fa-solid fa-thumbs-down"></i>
+        <div class="like-dislike-icon">
+          <button
+            class="button-like"
+            @click="likeMessages(Message.id)"
+            :key="like"
+          >
+            <i class="fa-solid fa-thumbs-up"></i>
+          </button>
+          {{ Message.likes }}
+          <button class="button-dislike" @click="dislikeMessages(Message.id)">
+            <i class="fa-solid fa-thumbs-down"></i>
+          </button>
+        </div>
       </div>
       <div class="creation">date création {{ Message.createdAt }}</div>
     </div>
@@ -136,6 +143,28 @@ export default {
           console.log(response);
           window.location.reload;
         }),
+        function (error) {
+          console.log(error);
+        };
+      this.$router.push("/Enregistrer");
+    },
+    likeMessages: function (Messageid) {
+      console.log(Messageid);
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
+      this.$store.dispatch("likeMessage").then(function (response) {
+        console.log(response);
+      }),
+        function (error) {
+          console.log(error);
+        };
+      this.$router.push("/Enregistrer");
+    },
+    dislikeMessages: function (Messageid) {
+      console.log(Messageid);
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
+      this.$store.dispatch("dislikeMessage").then(function (response) {
+        console.log(response);
+      }),
         function (error) {
           console.log(error);
         };

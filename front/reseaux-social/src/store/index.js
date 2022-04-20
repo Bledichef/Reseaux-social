@@ -73,6 +73,16 @@ const store = createStore({
 
       state.userInfos = userInfos;
     },
+    likeMessage: function (state, userInfos, Messageid) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+
+      state.userInfos = userInfos;
+    },
+    dislikeMessage: function (state, userInfos, Messageid) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+
+      state.userInfos = userInfos;
+    },
   },
   actions: {
     createAccount: ({ commit }, userInfos) => {
@@ -187,6 +197,54 @@ const store = createStore({
         instance
           .put(
             `http://localhost:8080/api/messages/${Messageid}`,
+            userInfos,
+            message
+          )
+          .then(function (response) {
+            commit(response.data);
+            resolve(response);
+            console.log(response);
+            localStorage.removeItem("Messageid");
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    likeMessage: ({ commit }, userInfos, Messageid, message) => {
+      (Messageid = localStorage.Messageid), commit("message");
+      return new Promise((resolve, reject) => {
+        console.log(Messageid);
+        commit;
+        instance
+          .post(
+            `http://localhost:8080/api/messages/${Messageid}/vote/like`,
+            userInfos,
+            message
+          )
+          .then(function (response) {
+            commit(response.data);
+            resolve(response);
+            console.log(response);
+            localStorage.removeItem("Messageid");
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    dislikeMessage: ({ commit }, userInfos, Messageid, message) => {
+      (Messageid = localStorage.Messageid), commit("message");
+      return new Promise((resolve, reject) => {
+        console.log(Messageid);
+        commit;
+        instance
+          .post(
+            `http://localhost:8080/api/messages/${Messageid}/vote/dislike`,
             userInfos,
             message
           )

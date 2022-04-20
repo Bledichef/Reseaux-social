@@ -1,5 +1,5 @@
 <template>
-  <p>Votre message est Poster</p>
+  <p>Votre Demande est effectuée</p>
   <router-link to="/">Home</router-link>
 </template>
 <script>
