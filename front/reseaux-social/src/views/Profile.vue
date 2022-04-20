@@ -80,7 +80,7 @@ export default {
       this.$router.push("/Connexion/");
     },
     deleteAccount: function () {
-      this.$store.push("deleteUser").then(function (response) {
+      this.$store.dispatch("deleteUser").then(function (response) {
         console.log(response);
       }),
         function (error) {

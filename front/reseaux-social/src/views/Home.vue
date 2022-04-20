@@ -139,6 +139,7 @@ export default {
         function (error) {
           console.log(error);
         };
+      this.$router.push("/Enregistrer");
     },
   },
 };

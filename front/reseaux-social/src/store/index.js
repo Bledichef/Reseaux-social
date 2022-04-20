@@ -52,7 +52,7 @@ const store = createStore({
       };
       localStorage.removeItem("user");
     },
-    deleteUser: function (state, userInfos) {
+    deleteUser: function (state, userInfos, user) {
       console.log(userInfos);
       instance.defaults.headers.common["Authorization"] = user.token;
 
@@ -64,7 +64,7 @@ const store = createStore({
       state.user = user;
     },
 
-    postMessage: function (state, userInfos) {
+    postMessage: function (state, user, userInfos) {
       instance.defaults.headers.common["Authorization"] = user.token;
       state.userInfos = userInfos;
     },
