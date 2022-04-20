@@ -1,3 +1,4 @@
+import { remove } from "@vue/shared";
 import { createStore } from "vuex";
 
 const axios = require("axios");
@@ -54,7 +55,7 @@ const store = createStore({
     deleteUser: function (state, userInfos) {
       console.log(userInfos);
       instance.defaults.headers.common["Authorization"] = user.token;
-      localStorage.setItem("user", JSON.stringify(user));
+
       state.userInfos = userInfos;
     },
     updateUser: function (state, user) {
@@ -67,8 +68,9 @@ const store = createStore({
       instance.defaults.headers.common["Authorization"] = user.token;
       state.userInfos = userInfos;
     },
-    updateMessage: function (state, userInfos) {
+    updateMessage: function (state, userInfos, Messageid) {
       instance.defaults.headers.common["Authorization"] = user.token;
+
       state.userInfos = userInfos;
     },
   },
@@ -177,21 +179,22 @@ const store = createStore({
           });
       });
     },
-    updateMessage: ({ commit }, userInfos, Messageid) => {
-      commit("message");
+    updateMessage: ({ commit }, userInfos, Messageid, message) => {
+      (Messageid = localStorage.Messageid), commit("message");
       return new Promise((resolve, reject) => {
         console.log(Messageid);
         commit;
         instance
           .put(
-            `$http://localhost:8080/api/messages/${Messageid}`,
+            `http://localhost:8080/api/messages/${Messageid}`,
             userInfos,
-            Messageid
+            message
           )
           .then(function (response) {
             commit(response.data);
             resolve(response);
             console.log(response);
+            localStorage.removeItem("Messageid");
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");

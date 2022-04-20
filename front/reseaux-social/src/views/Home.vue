@@ -71,6 +71,7 @@
 import { mapState } from "vuex";
 import { computed } from "@vue/runtime-core";
 import router from "@/router";
+import axios from "axios";
 
 export default {
   name: "Home",
@@ -124,12 +125,12 @@ export default {
     },
     updateMessages: function (Messageid) {
       console.log(Messageid);
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
 
       this.$store
-        .dispatch("updateMessage", Messageid, {
+        .dispatch("updateMessage", {
           title: this.title_modify,
           content: this.content_modify,
-          Messageid: Messageid,
         })
         .then(function (response) {
           console.log(response);

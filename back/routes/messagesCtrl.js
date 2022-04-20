@@ -3,6 +3,7 @@
 var models = require("../models");
 var asynclib = require("async");
 var jwtUtils = require("../utils/jwt.utils");
+const multer = require("../utils/multer-config");
 const message = require("../models/message");
 
 // Routes
