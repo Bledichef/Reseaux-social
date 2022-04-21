@@ -83,6 +83,7 @@ const store = createStore({
 
       state.userInfos = userInfos;
     },
+    GetComment: function (state, Messageid) {},
   },
   actions: {
     createAccount: ({ commit }, userInfos) => {
@@ -260,6 +261,22 @@ const store = createStore({
             console.log(error);
           });
       });
+    },
+    GetComment: ({ commit }, Messageid, comment) => {
+      (Messageid = localStorage.Messageid), commit("Comment");
+      console.log(Messageid);
+      commit;
+      instance
+        .get(`http://localhost:8080/api/messages/${Messageid}/comment`)
+        .then(function (response) {
+          commit(response);
+          console.log(Comment);
+          console.log(response);
+          console.log(response.data);
+          localStorage.removeItem("Messageid");
+          localStorage.setItem("Comment", JSON.stringify(response.data));
+        })
+        .catch(function () {});
     },
   },
 });

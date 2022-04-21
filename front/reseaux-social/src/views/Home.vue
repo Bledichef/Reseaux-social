@@ -71,6 +71,11 @@
         </div>
       </div>
       <div class="creation">date création {{ Message.createdAt }}</div>
+      <div class="Commentaires">
+        <p>Les commentaires seront ici</p>
+        {{ this.comment }}
+        <button @click="GetComments(Message.id)">Affiché les comm</button>
+      </div>
     </div>
   </div>
 </template>
@@ -98,6 +103,7 @@ export default {
     console.log(this.messages);
     console.log(data);
   },
+
   computed: {
     ...mapState({
       user: "userInfos",
@@ -125,10 +131,8 @@ export default {
         function (error) {
           console.log(error);
         };
-      // window.location = `/Users/moi_b/OneDrive/Bureau/api%20rest/front/reseaux-social/dist/index.html#/`;
+
       this.$router.push("/Enregistrer");
-      // window.location.reload;
-      // this.$router.reload("/Enregistrer/");
     },
     updateMessages: function (Messageid) {
       console.log(Messageid);
@@ -169,6 +173,17 @@ export default {
           console.log(error);
         };
       this.$router.push("/Enregistrer");
+    },
+    GetComments: function (Messageid) {
+      console.log(Messageid);
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
+      this.$store.dispatch("GetComment").then(function (response) {
+        console.log(localStorage.Comment);
+        console.log(response);
+      }),
+        function (error) {
+          console.log(error);
+        };
     },
   },
 };
