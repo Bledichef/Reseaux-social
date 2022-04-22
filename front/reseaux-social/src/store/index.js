@@ -88,6 +88,11 @@ const store = createStore({
       instance.defaults.headers.common["Authorization"] = user.token;
       state.userInfos = userInfos;
     },
+    updateComment: function (state, userInfos, Messageid) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+
+      state.userInfos = userInfos;
+    },
   },
   actions: {
     createAccount: ({ commit }, userInfos) => {
@@ -299,6 +304,31 @@ const store = createStore({
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    updateComment: ({ commit }, userInfos, Messageid, Commentid) => {
+      (Messageid = localStorage.Messageid), commit("message");
+      (Commentid = localStorage.Commentid), commit("Com");
+      return new Promise((resolve, reject) => {
+        console.log(Messageid);
+        commit;
+        instance
+          .put(
+            `http://localhost:8080/api/messages/${Messageid}/comment/${Commentid}`,
+            userInfos
+          )
+          .then(function (response) {
+            commit(response.data);
+            resolve(response);
+            console.log(response);
+            localStorage.removeItem("Messageid");
+            localStorage.removeItem("Commentid");
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");

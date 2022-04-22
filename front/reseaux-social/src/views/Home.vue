@@ -73,15 +73,42 @@
       <div class="creation">date création {{ Message.createdAt }}</div>
       <div class="Commentaires">
         <p>Les commentaires seront ici</p>
+
         {{ this.comment }}
         <button @click="GetComments(Message.id)">Affiché les comm</button>
+        <div class="modif_Comm">
+          <button
+            @click="switchToModifyComment()"
+            class="button_modif_com"
+            v-if="mode == ''"
+          >
+            modifié le commentaire
+          </button>
+          <input
+            v-model="Comment_Content_modify"
+            v-if="mode == 'modifyComment'"
+            class="form-row"
+            type="text"
+            placeholder="contenu modifié"
+          />
+          <button
+            @click="updateComment(Message.id, Commentid)"
+            v-if="mode == 'modifyComment'"
+          >
+            Poster le commentaire modifié
+          </button>
+        </div>
         <input
           v-model="Post_comment"
           class="form-row"
           type="text"
           placeholder="Poster un commentaire"
+          v-if="mode == ''"
         />
-        <button @click="createComments(Message.id)">
+        <button
+          v-if="mode == ''"
+          @click="createComments(Message.id, Commentid)"
+        >
           poster le commentaire
         </button>
       </div>
@@ -126,6 +153,9 @@ export default {
     },
     switchToModifyMessage: function () {
       this.mode = "modifyMessage";
+    },
+    switchToModifyComment: function () {
+      this.mode = "modifyComment";
     },
     createMessage: function () {
       this.$store
@@ -211,6 +241,24 @@ export default {
           console.log(error);
         };
 
+      this.$router.push("/Enregistrer");
+    },
+    updateComment: function (Messageid, Commentid) {
+      console.log(Messageid);
+      console.log(Commentid);
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
+      localStorage.setItem("Commentid", JSON.stringify(Commentid));
+      this.$store
+        .dispatch("updateComment", {
+          content: this.Comment_Content_modify,
+        })
+        .then(function (response) {
+          console.log(response);
+          window.location.reload;
+        }),
+        function (error) {
+          console.log(error);
+        };
       this.$router.push("/Enregistrer");
     },
   },
