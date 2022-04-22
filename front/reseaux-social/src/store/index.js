@@ -84,6 +84,10 @@ const store = createStore({
       state.userInfos = userInfos;
     },
     GetComment: function (state, Messageid) {},
+    postComment: function (state, user, userInfos, Messageid) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+      state.userInfos = userInfos;
+    },
   },
   actions: {
     createAccount: ({ commit }, userInfos) => {
@@ -270,6 +274,7 @@ const store = createStore({
         .get(`http://localhost:8080/api/messages/${Messageid}/comment`)
         .then(function (response) {
           commit(response);
+
           console.log(Comment);
           console.log(response);
           console.log(response.data);
@@ -277,6 +282,30 @@ const store = createStore({
           localStorage.setItem("Comment", JSON.stringify(response.data));
         })
         .catch(function () {});
+    },
+    postComment: ({ commit }, userInfos, Messageid, comment) => {
+      (Messageid = localStorage.Messageid), commit("Comment");
+      console.log(Messageid);
+      return new Promise((resolve, reject) => {
+        commit;
+        instance
+          .post(
+            `http://localhost:8080/api/messages/${Messageid}/comment/new`,
+            userInfos,
+            comment
+          )
+          .then(function (response) {
+            commit(response.data);
+            resolve(response);
+            console.log(response);
+            localStorage.removeItem("Messageid");
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
     },
   },
 });

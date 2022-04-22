@@ -75,6 +75,15 @@
         <p>Les commentaires seront ici</p>
         {{ this.comment }}
         <button @click="GetComments(Message.id)">Affiché les comm</button>
+        <input
+          v-model="Post_comment"
+          class="form-row"
+          type="text"
+          placeholder="Poster un commentaire"
+        />
+        <button @click="createComments(Message.id)">
+          poster le commentaire
+        </button>
       </div>
     </div>
   </div>
@@ -92,6 +101,7 @@ export default {
     return {
       mode: "",
       messages: {},
+      comment: {},
     };
   },
   async created() {
@@ -184,6 +194,24 @@ export default {
         function (error) {
           console.log(error);
         };
+    },
+    createComments: function (Messageid) {
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
+      console.log(Messageid);
+      this.$store
+        .dispatch("postComment", {
+          content: this.Post_comment,
+        })
+
+        .then(function (response) {
+          console.log(response);
+          // window.location.reload;
+        }),
+        function (error) {
+          console.log(error);
+        };
+
+      this.$router.push("/Enregistrer");
     },
   },
 };
