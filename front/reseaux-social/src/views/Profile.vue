@@ -2,10 +2,11 @@
   <h1 class="card__title">Espace Perso</h1>
 
   <p class="card__subtitle">A propos de vous</p>
-  <p class="card_user">
-    Adresse Mail: {{ user.email }} Nom de l'utilisateur:
-    {{ user.username }} Fonction: {{ user.job }}
-  </p>
+  <div class="card_user">
+    <p class="MAil">Adresse Mail: {{ user.email }}</p>
+    <p class="User">Nom de l'utilisateur: {{ user.username }}</p>
+    <p class="Job">Fonction: {{ user.job }}</p>
+  </div>
 
   <div class="form-row">
     <button @click="logout()" class="button">
@@ -80,21 +81,41 @@ export default {
       this.$router.push("/Connexion/");
     },
     deleteAccount: function () {
-      this.$store.dispatch("deleteUser").then(function (response) {
-        console.log(response);
-      }),
-        function (error) {
-          console.log(error);
-        };
-      this.$router.push("/Connexion/");
+      alert("Votre compte est supprimé");
+      if (true) {
+        this.$store.dispatch("deleteUser").then(function (response) {
+          console.log(response);
+        }),
+          function (error) {
+            console.log(error);
+          };
+        this.$router.push("/Connexion/");
+      } else {
+      }
     },
   },
 };
 </script>
 <style>
 .card_user {
-  color: rgb(246, 243, 243);
+  border-style: outset;
+  width: 50%;
+  display: inline-block;
   font-weight: bold;
   font-size: 110%;
+  border-radius: 50px;
+  background-color: antiquewhite;
+  margin-block-end: 30px;
+  margin-block-start: 20px;
+}
+.button {
+  border-style: outset;
+  border-radius: 25%;
+  background-color: antiquewhite;
+}
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 </style>

@@ -108,6 +108,9 @@ const store = createStore({
             console.log(response);
           })
           .catch(function (error) {
+            alert(
+              `verifier le formulaire, il comporte une ou plusieurs erreurs, Votre nom d'utilisateur doit contenir entre 2 et 20 lettres et Votre mot de passe doit contenir minimum 6 et au maximum 20 caractères. Doit inclure une majuscule, une minuscule et un chiffre et des caractères spéciaux et ne peut pas non plus commencer par un chiffre, un trait de soulignement ou un caractère spécial`
+            );
             commit("setStatus", "error_create");
             reject(error);
             console.log(error);
@@ -127,6 +130,9 @@ const store = createStore({
             console.log(response);
           })
           .catch(function (error) {
+            alert(
+              `verifier le formulaire, il comporte une ou plusieurs erreurs, Votre nom d'utilisateur doit contenir entre 2 et 20 lettres et Votre mot de passe doit contenir minimum 6 et au maximum 20 caractères. Doit inclure une majuscule, une minuscule et un chiffre et des caractères spéciaux et ne peut pas non plus commencer par un chiffre, un trait de soulignement ou un caractère spécial`
+            );
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);

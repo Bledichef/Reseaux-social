@@ -5,6 +5,7 @@ var messagesCtrl = require("./routes/messagesCtrl");
 var likesCtrl = require("./routes/likesCtrl");
 var commentCtrl = require("./routes/commentCtrl");
 const AdminCtrl = require("./routes/AdminCtrl");
+const multer = require("multer");
 
 // Router
 exports.router = (function () {

@@ -1,27 +1,27 @@
 <template>
   <h1>Bienvenue</h1>
   <div class="messages">
-    <h3 class="card-header">Derniers sujet</h3>
-    <button @click="switchToCreateMessage()" class="button">
+    <button @click="switchToCreateMessage()" v-if="mode == ''" class="button">
       créer un post
     </button>
     <input
       v-model="title"
       v-if="mode == 'createMessage'"
-      class="form-row"
+      class="form-row1"
       type="text"
       placeholder="Titre"
     />
     <input
       v-model="content"
       v-if="mode == 'createMessage'"
-      class="form-row"
+      class="form-row1"
       type="text"
       placeholder="Contenu"
     />
     <button v-if="mode == 'createMessage'" @click="createMessage()">
       Poster
     </button>
+    <h3 class="card-header">Derniers sujet</h3>
 
     <div class="card-body" v-for="Message in messages" :key="Message.id">
       <div class="Title-message">Titre message {{ Message.title }}</div>
@@ -30,14 +30,14 @@
         <input
           v-model="title_modify"
           v-if="mode == 'modifyMessage'"
-          class="form-row"
+          class="form-row1"
           type="text"
           placeholder="Titre modifié"
         />
         <input
           v-model="content_modify"
           v-if="mode == 'modifyMessage'"
-          class="form-row"
+          class="form-row1"
           type="text"
           placeholder="contenu modifié"
         />
@@ -94,7 +94,7 @@
           <input
             v-model="Comment_Content_modify"
             v-if="mode == 'modifyComment'"
-            class="form-row"
+            class="form-row1"
             type="text"
             placeholder="contenu modifié"
           />
@@ -107,7 +107,7 @@
         </div>
         <input
           v-model="Post_comment"
-          class="form-row"
+          class="form-row1"
           type="text"
           placeholder="Poster un commentaire"
           v-if="mode == ''"
@@ -279,10 +279,16 @@ computed: {
 }
 </script>
 <style>
+.button {
+  border-style: outset;
+  border-radius: 25%;
+  background-color: antiquewhite;
+}
 .messages {
   display: inline-block;
 }
 .card-body {
+  border-style: outset;
   border-radius: 50px;
   background-color: antiquewhite;
   margin-block-end: 30px;

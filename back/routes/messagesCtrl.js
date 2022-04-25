@@ -51,6 +51,9 @@ module.exports = {
               content: content,
               likes: 0,
               UserId: userFound.id,
+              // attachement: `${req.protocol}://${req.get("host")}/images/${
+              // req.file.filename
+              // }`,
             }).then(function (newMessage) {
               done(newMessage);
             });

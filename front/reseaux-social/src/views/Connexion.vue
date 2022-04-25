@@ -19,9 +19,7 @@
       type="text"
       placeholder="Adresse mail"
     />
-    <div class="consignes">
-      Votre nom d'utilisateur doit contenir entre 2 et 20 lettres
-    </div>
+
     <input
       v-model="username"
       class="form-row"
@@ -36,12 +34,7 @@
       type="text"
       placeholder="Mot de passe"
     />
-    <div class="consignes">
-      Votre mot de passe doit contenir minimum 6 et au maximum 20 caractères.
-      Doit inclure une majuscule, une minuscule et un chiffre et des caractères
-      spéciaux et ne peut pas non plus commencer par un chiffre, un trait de
-      soulignement ou un caractère spécial
-    </div>
+
     <input
       v-model="job"
       class="form-row"
@@ -169,8 +162,5 @@ body {
 .card_action {
   color: blue;
   font-weight: bold;
-}
-.consignes {
-  color: red;
 }
 </style>
