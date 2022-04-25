@@ -73,8 +73,15 @@
       <div class="creation">date création {{ Message.createdAt }}</div>
       <div class="Commentaires">
         <p>Les commentaires seront ici</p>
-
-        {{ this.comment }}
+        <!-- <div class="com" v-for="comments in this.comment" :key="comments"> -->
+        <!-- <div class="commentaire">{{ comments }}</div> -->
+        <!-- </div> -->
+        <div
+          class="comment-content"
+          v-if="'this.Message.id' == 'localStorage.Messageid'"
+        >
+          {{ this.comment }}
+        </div>
         <button @click="GetComments(Message.id)">Affiché les comm</button>
         <div class="modif_Comm">
           <button
@@ -131,6 +138,7 @@ export default {
       comment: {},
     };
   },
+
   async created() {
     // Simple GET request using fetch
     const response = await fetch("http://localhost:8080/api/messages");
@@ -140,7 +148,11 @@ export default {
     console.log(this.messages);
     console.log(data);
   },
-
+  mounted() {
+    if (localStorage.Comment) {
+      this.comment = localStorage.Comment;
+    }
+  },
   computed: {
     ...mapState({
       user: "userInfos",
@@ -157,6 +169,7 @@ export default {
     switchToModifyComment: function () {
       this.mode = "modifyComment";
     },
+
     createMessage: function () {
       this.$store
         .dispatch("postMessage", {
@@ -219,7 +232,6 @@ export default {
       localStorage.setItem("Messageid", JSON.stringify(Messageid));
       this.$store.dispatch("GetComment").then(function (response) {
         console.log(localStorage.Comment);
-        console.log(response);
       }),
         function (error) {
           console.log(error);

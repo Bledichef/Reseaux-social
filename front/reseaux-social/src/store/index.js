@@ -278,15 +278,17 @@ const store = createStore({
       instance
         .get(`http://localhost:8080/api/messages/${Messageid}/comment`)
         .then(function (response) {
-          commit(response);
-
-          console.log(Comment);
+          commit(Comment);
           console.log(response);
           console.log(response.data);
-          localStorage.removeItem("Messageid");
+          // localStorage.removeItem("Messageid");
           localStorage.setItem("Comment", JSON.stringify(response.data));
         })
-        .catch(function () {});
+        .catch(function () {
+          commit("setStatus", "error_logged");
+          reject(error);
+          console.log(error);
+        });
     },
     postComment: ({ commit }, userInfos, Messageid, comment) => {
       (Messageid = localStorage.Messageid), commit("Comment");

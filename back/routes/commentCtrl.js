@@ -82,7 +82,10 @@ module.exports = {
     if (limit > 50) {
       limit = 50;
     }
-    models.Comment.findAll({})
+    models.Comment.findAll({
+      where: { messageId: req.params.messageId },
+    })
+
       .then(function (comment) {
         if (comment) {
           res.status(200).json(comment);
