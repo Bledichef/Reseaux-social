@@ -2,11 +2,13 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var apiRouter = require("./apiRouter").router;
+const path = require("path");
 
 // Instance server
 var server = express();
 
 // Body Parser configuration
+server.use("/images", express.static(path.join(__dirname, "images")));
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 

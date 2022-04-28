@@ -84,6 +84,7 @@ module.exports = {
     }
     models.Comment.findAll({
       where: { messageId: req.params.messageId },
+      include: models.User,
     })
 
       .then(function (comment) {

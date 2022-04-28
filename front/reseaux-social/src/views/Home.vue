@@ -50,7 +50,10 @@
       </div>
       id du message => {{ Message.id }}
       <div class="content">Contenu du message {{ Message.content }}</div>
-      <div class="User">Createur du message => {{ Message.UserId }}</div>
+      <div class="User">
+        Createur du message => {{ Message.Users[0].username }}
+        {{ Message.UserId }}
+      </div>
       <div class="like">
         like =>
 
@@ -72,38 +75,44 @@
       </div>
       <div class="creation">date création {{ Message.createdAt }}</div>
       <div class="Commentaires">
-        <p>Les commentaires seront ici</p>
-        <!-- <div class="com" v-for="comments in this.comment" :key="comments"> -->
-        <!-- <div class="commentaire">{{ comments }}</div> -->
-        <!-- </div> -->
-        <div
-          class="comment-content"
-          v-if="'this.Message.id' == 'localStorage.Messageid'"
-        >
-          {{ this.comment }}
-        </div>
         <button @click="GetComments(Message.id)">Affiché les comm</button>
-        <div class="modif_Comm">
-          <button
-            @click="switchToModifyComment()"
-            class="button_modif_com"
-            v-if="mode == ''"
-          >
-            modifié le commentaire
-          </button>
-          <input
-            v-model="Comment_Content_modify"
-            v-if="mode == 'modifyComment'"
-            class="form-row1"
-            type="text"
-            placeholder="contenu modifié"
-          />
-          <button
-            @click="updateComment(Message.id, Commentid)"
-            v-if="mode == 'modifyComment'"
-          >
-            Poster le commentaire modifié
-          </button>
+        <p>Les commentaires seront ici</p>
+
+        <div class="com" v-for="comments in comment" :key="comments">
+          <div class="Grand-Com" v-if="Message.id == comments.messageId">
+            <div class="User_Post_Comment">
+              {{ comments.User.username }} à poster un commentaire
+            </div>
+            <p class="Post_Comment">
+              {{ comments.content }}
+            </p>
+            <div class="date_Post_Comment">
+              date de creatio, du commentaire: {{ comments.createdAt }}
+            </div>
+
+            <div class="modif_Comm">
+              <button
+                @click="switchToModifyComment()"
+                class="button_modif_com"
+                v-if="mode == ''"
+              >
+                modifié le commentaire
+              </button>
+              <input
+                v-model="Comment_Content_modify"
+                v-if="mode == 'modifyComment'"
+                class="form-row1"
+                type="text"
+                placeholder="contenu modifié"
+              />
+              <button
+                @click="updateComment(Message.id, comments.id)"
+                v-if="mode == 'modifyComment'"
+              >
+                Poster le commentaire modifié
+              </button>
+            </div>
+          </div>
         </div>
         <input
           v-model="Post_comment"
@@ -135,7 +144,7 @@ export default {
     return {
       mode: "",
       messages: {},
-      comment: {},
+      comment: "",
     };
   },
 
@@ -146,11 +155,14 @@ export default {
     this.messages = data;
 
     console.log(this.messages);
-    console.log(data);
+    // console.log(data);
   },
   mounted() {
     if (localStorage.Comment) {
-      this.comment = localStorage.Comment;
+      this.comment = JSON.parse(localStorage.Comment);
+      // console.log(localStorage.Comment);
+      console.log(this.comment);
+      // console.log(this.messages);
     }
   },
   computed: {
@@ -214,7 +226,7 @@ export default {
         function (error) {
           console.log(error);
         };
-      this.$router.push("/Enregistrer");
+      // this.$router.push("/Enregistrer");
     },
     dislikeMessages: function (Messageid) {
       console.log(Messageid);
@@ -225,7 +237,7 @@ export default {
         function (error) {
           console.log(error);
         };
-      this.$router.push("/Enregistrer");
+      // this.$router.push("/Enregistrer");
     },
     GetComments: function (Messageid) {
       console.log(Messageid);
@@ -267,6 +279,7 @@ export default {
         .then(function (response) {
           console.log(response);
           window.location.reload;
+          localStorage.removeItem("Comment");
         }),
         function (error) {
           console.log(error);
@@ -296,5 +309,15 @@ computed: {
 }
 .fa-solid {
   width: 200%;
+}
+.Commentaires {
+  margin-block-start: 15px;
+
+  border-radius: 50px;
+}
+.com {
+  border-radius: 20px;
+  border-style: groove;
+  margin-block-start: 10px;
 }
 </style>

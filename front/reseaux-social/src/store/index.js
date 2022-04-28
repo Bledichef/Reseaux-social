@@ -245,6 +245,7 @@ const store = createStore({
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
+            window.location.reload(true);
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");
@@ -269,6 +270,7 @@ const store = createStore({
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
+            window.location.reload(true);
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");
@@ -289,6 +291,7 @@ const store = createStore({
           console.log(response.data);
           // localStorage.removeItem("Messageid");
           localStorage.setItem("Comment", JSON.stringify(response.data));
+          window.location.reload(true);
         })
         .catch(function () {
           commit("setStatus", "error_logged");
