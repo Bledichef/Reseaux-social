@@ -24,56 +24,60 @@
     <h3 class="card-header">Derniers sujet</h3>
 
     <div class="card-body" v-for="Message in messages" :key="Message.id">
-      <div class="Title-message">Titre message {{ Message.title }}</div>
-      <div class="modify">
-        <button @click="switchToModifyMessage()" class="button">Modifié</button>
-        <input
-          v-model="title_modify"
-          v-if="mode == 'modifyMessage'"
-          class="form-row1"
-          type="text"
-          placeholder="Titre modifié"
-        />
-        <input
-          v-model="content_modify"
-          v-if="mode == 'modifyMessage'"
-          class="form-row1"
-          type="text"
-          placeholder="contenu modifié"
-        />
-        <button
-          v-if="mode == 'modifyMessage'"
-          @click="updateMessages(Message.id)"
-        >
-          Poster
-        </button>
-      </div>
-      id du message => {{ Message.id }}
-      <div class="content">Contenu du message {{ Message.content }}</div>
-      <div class="User">
-        Createur du message => {{ Message.Users[0].username }}
-        {{ Message.UserId }}
-      </div>
-      <div class="like">
-        like =>
-
-        <i v-if="Message.likes > '0'" class="fa-solid fa-heart"></i>
-        <i v-if="Message.likes <= '0'" class="fa-regular fa-heart"></i>
-        <div class="like-dislike-icon">
-          <button
-            class="button-like"
-            @click="likeMessages(Message.id)"
-            :key="like"
-          >
-            <i class="fa-solid fa-thumbs-up"></i>
+      <div class="Message">
+        <div class="Title-message">Titre message {{ Message.title }}</div>
+        <div class="modify">
+          <button @click="switchToModifyMessage()" class="button">
+            Modifié
           </button>
-          {{ Message.likes }}
-          <button class="button-dislike" @click="dislikeMessages(Message.id)">
-            <i class="fa-solid fa-thumbs-down"></i>
+          <input
+            v-model="title_modify"
+            v-if="mode == 'modifyMessage'"
+            class="form-row1"
+            type="text"
+            placeholder="Titre modifié"
+          />
+          <input
+            v-model="content_modify"
+            v-if="mode == 'modifyMessage'"
+            class="form-row1"
+            type="text"
+            placeholder="contenu modifié"
+          />
+          <button
+            v-if="mode == 'modifyMessage'"
+            @click="updateMessages(Message.id)"
+          >
+            Poster
           </button>
         </div>
+        id du message => {{ Message.id }}
+        <div class="content">Contenu du message {{ Message.content }}</div>
+        <div class="User">
+          Createur du message => {{ Message.Users[0].username }}
+          {{ Message.UserId }}
+        </div>
+        <div class="like">
+          like =>
+
+          <i v-if="Message.likes > '0'" class="fa-solid fa-heart"></i>
+          <i v-if="Message.likes <= '0'" class="fa-regular fa-heart"></i>
+          <div class="like-dislike-icon">
+            <button
+              class="button-like"
+              @click="likeMessages(Message.id)"
+              :key="like"
+            >
+              <i class="fa-solid fa-thumbs-up"></i>
+            </button>
+            {{ Message.likes }}
+            <button class="button-dislike" @click="dislikeMessages(Message.id)">
+              <i class="fa-solid fa-thumbs-down"></i>
+            </button>
+          </div>
+        </div>
+        <div class="creation">date création {{ Message.createdAt }}</div>
       </div>
-      <div class="creation">date création {{ Message.createdAt }}</div>
       <div class="Commentaires">
         <button @click="GetComments(Message.id)">Affiché les comm</button>
         <p>Les commentaires seront ici</p>
@@ -302,7 +306,7 @@ computed: {
 }
 .card-body {
   border-style: outset;
-  border-radius: 50px;
+  border-radius: 30px;
   background-color: antiquewhite;
   margin-block-end: 30px;
   margin-block-start: 20px;
@@ -315,7 +319,12 @@ computed: {
 
   border-radius: 50px;
 }
-.com {
+.Grand-Com {
+  border-radius: 20px;
+  border-style: groove;
+  margin-block-start: 10px;
+}
+.Message {
   border-radius: 20px;
   border-style: groove;
   margin-block-start: 10px;

@@ -35,7 +35,6 @@ module.exports = {
       [
         function (done) {
           models.User.findOne({
-            attributes: ["username", "id"],
             where: { id: userId },
           })
             .then(function (userFound) {
@@ -52,7 +51,7 @@ module.exports = {
               content: content,
               likes: 0,
               UserId: userFound.id,
-              UserName: userFound.username,
+
               // attachement: `${req.protocol}://${req.get("host")}/images/${
               // req.file.filename
               // }`,
@@ -88,7 +87,6 @@ module.exports = {
 
     models.Message.findAll({
       include: models.User,
-
       order: [order != null ? order.split(":") : ["title", "ASC"]],
       attributes: fields !== "*" && fields != null ? fields.split(",") : null,
       limit: !isNaN(limit) ? limit : null,
