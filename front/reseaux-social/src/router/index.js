@@ -9,7 +9,7 @@ import Enregistrer from "@/views/Enregistrer";
 const routes = [
   {
     name: "Home",
-    path: "/",
+    path: "/Home/",
     component: Home,
     props: true,
     meta: {
@@ -18,7 +18,7 @@ const routes = [
   },
   {
     name: "Connexion",
-    path: "/Connexion/",
+    path: "/",
     component: Connexion,
     props: true,
     meta: {

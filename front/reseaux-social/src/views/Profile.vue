@@ -109,6 +109,7 @@ export default {
   margin-block-start: 20px;
 }
 .button {
+  color: #0d07cd;
   border-style: outset;
   border-radius: 25%;
   background-color: antiquewhite;

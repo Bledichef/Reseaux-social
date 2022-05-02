@@ -4,8 +4,8 @@
       <img class="logo" alt=" logo" src="./assets/logoReseau.png" />
     </header>
     <!-- <img src="./assets/logoReseau.png" /> -->
-    <router-link to="/">Home</router-link> |
-    <router-link to="/Connexion">Connexion</router-link> |
+    <router-link to="/Home/">Home</router-link> |
+    <router-link to="/">Connexion</router-link> |
 
     <router-link to="/Profile">Profil</router-link> |
     <!-- <router-link :to="{ name: 'Enregistrer', params: { name: 'Enregistrer' } }" -->
@@ -29,11 +29,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #086fd6;
 }
 a {
   text-decoration: none;
-  color: #087ef5;
+  color: #0d07cd;
 }
 .router-link-active {
   font-weight: bold;
@@ -42,5 +42,14 @@ a {
 .logo {
   max-width: 25%;
   max-height: 5%;
+}
+.fa-thumbs-up {
+  color: #0d07cd;
+}
+.fa-thumbs-down {
+  color: #0d07cd;
+}
+.fa-heart {
+  color: #0d07cd;
 }
 </style>

@@ -150,7 +150,7 @@ export default {
 </script>
 <style>
 body {
-  background-color: rgba(30, 41, 104, 0.774);
+  background-color: #ff9830cc;
   /* text-emphasis-color: #087ef5; */
 }
 .form_input {

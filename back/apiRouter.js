@@ -38,6 +38,9 @@ exports.router = (function () {
   apiRouter
     .route("/messages/:messageId/comment/:commentId/")
     .put(commentCtrl.updateComment);
+  apiRouter
+    .route("/messages/:messageId/comment/:commentId/")
+    .delete(commentCtrl.deleteComment);
 
   // Route Admin
   apiRouter.route("/admin/:messageId/").put(AdminCtrl.adminUpdateMessages);

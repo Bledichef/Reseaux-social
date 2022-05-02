@@ -86,7 +86,9 @@
         <div class="creation">date création {{ Message.createdAt }}</div>
       </div>
       <div class="Commentaires">
-        <button @click="GetComments(Message.id)">Affiché les comm</button>
+        <button @click="GetComments(Message.id)" class="button">
+          Affiché les comm
+        </button>
         <p>Les commentaires seront ici</p>
 
         <div class="com" v-for="comments in comment" :key="comments">
@@ -104,7 +106,7 @@
             <div class="modif_Comm">
               <button
                 @click="switchToModifyComment()"
-                class="button_modif_com"
+                class="button"
                 v-if="mode == ''"
               >
                 modifié le commentaire
@@ -117,10 +119,18 @@
                 placeholder="contenu modifié"
               />
               <button
+                class="button"
                 @click="updateComment(Message.id, comments.id)"
                 v-if="mode == 'modifyComment'"
               >
                 Poster le commentaire modifié
+              </button>
+              <button
+                class="button"
+                @click="deleteComment(Message.id, comments.id)"
+                v-if="mode == 'modifyComment'"
+              >
+                Supprimer le commentaire
               </button>
             </div>
           </div>
@@ -133,6 +143,7 @@
           v-if="mode == ''"
         />
         <button
+          class="button"
           v-if="mode == ''"
           @click="createComments(Message.id, Commentid)"
         >
@@ -310,6 +321,21 @@ export default {
         };
       this.$router.push("/Enregistrer");
     },
+    deleteComment: function (Messageid, Commentid) {
+      console.log(Messageid);
+      console.log(Commentid);
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
+      localStorage.setItem("Commentid", JSON.stringify(Commentid));
+      this.$store.dispatch("deleteComment", {}).then(function (response) {
+        console.log(response);
+        window.location.reload;
+        localStorage.removeItem("Comment");
+      }),
+        function (error) {
+          console.log(error);
+        };
+      this.$router.push("/Enregistrer");
+    },
   },
 };
 computed: {
@@ -317,6 +343,7 @@ computed: {
 </script>
 <style>
 .button {
+  color: #0d07cd;
   border-style: outset;
   border-radius: 25%;
   background-color: antiquewhite;
@@ -336,7 +363,7 @@ computed: {
 }
 .Commentaires {
   margin-block-start: 15px;
-
+  margin-block-end: 15px;
   border-radius: 50px;
 }
 .Grand-Com {

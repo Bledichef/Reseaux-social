@@ -98,6 +98,11 @@ const store = createStore({
 
       state.userInfos = userInfos;
     },
+    deleteComment: function (state, userInfos, Messageid) {
+      instance.defaults.headers.common["Authorization"] = user.token;
+
+      state.userInfos = userInfos;
+    },
   },
   actions: {
     createAccount: ({ commit }, userInfos) => {
@@ -360,6 +365,31 @@ const store = createStore({
         commit;
         instance
           .put(
+            `http://localhost:8080/api/messages/${Messageid}/comment/${Commentid}`,
+            userInfos
+          )
+          .then(function (response) {
+            commit(response.data);
+            resolve(response);
+            console.log(response);
+            localStorage.removeItem("Messageid");
+            localStorage.removeItem("Commentid");
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    deleteComment: ({ commit }, userInfos, Messageid, Commentid) => {
+      (Messageid = localStorage.Messageid), commit("message");
+      (Commentid = localStorage.Commentid), commit("Com");
+      return new Promise((resolve, reject) => {
+        console.log(Messageid);
+        commit;
+        instance
+          .delete(
             `http://localhost:8080/api/messages/${Messageid}/comment/${Commentid}`,
             userInfos
           )
