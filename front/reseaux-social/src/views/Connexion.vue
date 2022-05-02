@@ -10,7 +10,7 @@
   </p>
   <p class="card__subtitle" v-if="mode == 'create'">
     Tu as déjà un compte ?
-    <span class="card__action" @click="switchToLogin()">Se connecter</span>
+    <span class="card_action" @click="switchToLogin()">Se connecter</span>
   </p>
   <div class="form_input">
     <input

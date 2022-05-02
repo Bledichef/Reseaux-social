@@ -111,7 +111,7 @@ export default {
 .button {
   color: #0d07cd;
   border-style: outset;
-  border-radius: 25%;
+  border-radius: 10%;
   background-color: antiquewhite;
 }
 .form-row {

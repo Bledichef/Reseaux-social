@@ -46,12 +46,14 @@
             placeholder="contenu modifié"
           />
           <button
+            class="button"
             v-if="mode == 'modifyMessage'"
             @click="updateMessages(Message.id)"
           >
             Poster
           </button>
           <button
+            class="button"
             v-if="mode == 'modifyMessage'"
             @click="deleteMessages(Message.id)"
           >
@@ -100,7 +102,7 @@
               {{ comments.content }}
             </p>
             <div class="date_Post_Comment">
-              date de creatio, du commentaire: {{ comments.createdAt }}
+              date de création du commentaire: {{ comments.createdAt }}
             </div>
 
             <div class="modif_Comm">
@@ -343,16 +345,29 @@ computed: {
 </script>
 <style>
 .button {
-  color: #0d07cd;
+  color: #6d68f5;
   border-style: outset;
+  border-color: rgb(230, 122, 110);
   border-radius: 25%;
   background-color: antiquewhite;
+  margin-block-start: 5px;
+  margin-block-end: 5px;
 }
 .messages {
   display: inline-block;
 }
-.card-body {
+/* .Title-message {
   border-style: outset;
+  border-color: rgb(230, 122, 110);
+  border-radius: 5%;
+}
+.like {
+  border-style: solid;
+  border-color: rgb(230, 122, 110);
+} */
+.card-body {
+  border-style: groove;
+  border-color: rgb(230, 122, 110);
   border-radius: 30px;
   background-color: antiquewhite;
   margin-block-end: 30px;
@@ -368,12 +383,14 @@ computed: {
 }
 .Grand-Com {
   border-radius: 20px;
-  border-style: groove;
+  border-style: dotted;
+  border-color: rgb(230, 122, 110);
   margin-block-start: 10px;
 }
 .Message {
   border-radius: 20px;
-  border-style: groove;
+  border-style: dotted;
+  border-color: rgb(230, 122, 110);
   margin-block-start: 10px;
 }
 </style>
