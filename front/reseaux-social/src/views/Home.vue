@@ -30,6 +30,7 @@
           <button @click="switchToModifyMessage()" class="button">
             Modifié
           </button>
+
           <input
             v-model="title_modify"
             v-if="mode == 'modifyMessage'"
@@ -50,11 +51,17 @@
           >
             Poster
           </button>
+          <button
+            v-if="mode == 'modifyMessage'"
+            @click="deleteMessages(Message.id)"
+          >
+            Supprimer le poste
+          </button>
         </div>
         id du message => {{ Message.id }}
         <div class="content">Contenu du message {{ Message.content }}</div>
         <div class="User">
-          Createur du message => {{ Message.Users[0].username }}
+          <!-- Createur du message => {{ Message.Users[0].username }} -->
           {{ Message.UserId }}
         </div>
         <div class="like">
@@ -216,6 +223,19 @@ export default {
           console.log(response);
           window.location.reload;
         }),
+        function (error) {
+          console.log(error);
+        };
+      this.$router.push("/Enregistrer");
+    },
+    deleteMessages: function (Messageid) {
+      console.log(Messageid);
+      localStorage.setItem("Messageid", JSON.stringify(Messageid));
+
+      this.$store.dispatch("deleteMessage", {}).then(function (response) {
+        console.log(response);
+        window.location.reload;
+      }),
         function (error) {
           console.log(error);
         };

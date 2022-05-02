@@ -24,7 +24,7 @@ module.exports = {
       return res.status(400).json({ error: " Titre ou article vide " });
     }
 
-    if (title.length <= 2 || content.length <= 5) {
+    if (title.length <= 2 || content.length <= 3) {
       return res.status(400).json({
         error: " le Titre ou le contenu de votre article sont trop court",
       });
@@ -35,6 +35,7 @@ module.exports = {
       [
         function (done) {
           models.User.findOne({
+            attributes: ["username", "id"],
             where: { id: userId },
           })
             .then(function (userFound) {
@@ -51,7 +52,7 @@ module.exports = {
               content: content,
               likes: 0,
               UserId: userFound.id,
-
+              Users: userFound,
               // attachement: `${req.protocol}://${req.get("host")}/images/${
               // req.file.filename
               // }`,
@@ -86,7 +87,7 @@ module.exports = {
     }
 
     models.Message.findAll({
-      include: models.User,
+      include: [models.User],
       order: [order != null ? order.split(":") : ["title", "ASC"]],
       attributes: fields !== "*" && fields != null ? fields.split(",") : null,
       limit: !isNaN(limit) ? limit : null,
@@ -140,6 +141,48 @@ module.exports = {
         res.status(400).json(console.log(err));
       });
   },
+
+  deleteMessages: function (req, res, next) {
+    var headerAuth = req.headers["authorization"];
+    var userId = jwtUtils.getUserId(headerAuth);
+    var isAdmin = jwtUtils.getAdmin(headerAuth);
+
+    models.User.findOne({
+      attributes: ["isadmin", "id"],
+      where: { id: userId }, //id de l'utilisateur
+    })
+      .then((userFound) => {
+        models.Message.findOne({
+          include: models.User,
+          where: { id: req.params.messageId },
+        })
+
+          .then(function (messageFound) {
+            if (isAdmin === true || messageFound.UserId === userId) {
+              models.Message.destroy({
+                where: { id: req.params.messageId },
+              })
+                .then(() =>
+                  res.status(200).json({ message: "Le post a été supprimé" })
+                )
+                .catch((error) => res.status(400).json({ error }));
+            }
+            // Si le user qui fait la requête n'est ni admin, ni celui qui a créé le post -> suppression KO
+            else {
+              return res.status(404).json({
+                error:
+                  "Vous n'avez pas l'autorisation de supprimer un post qui ne vous appartient pas",
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            return res.status(400).json({ error: "Ce post n'existe plus" });
+          });
+      })
+      .catch((error) => res.status(400).json({ error }));
+  },
+
   /* updateMessages: function (req, res) {
     // Getting auth header
     var headerAuth = req.headers["authorization"];

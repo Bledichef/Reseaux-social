@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
         allowNull: false,
       },
+      onDelete: "CASCADE",
     });
   };
   return Comment;
