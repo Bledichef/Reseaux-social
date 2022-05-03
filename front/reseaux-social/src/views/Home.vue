@@ -18,7 +18,11 @@
       type="text"
       placeholder="Contenu"
     />
-    <button v-if="mode == 'createMessage'" @click="createMessage()">
+    <button
+      class="button"
+      v-if="mode == 'createMessage'"
+      @click="createMessage()"
+    >
       Poster
     </button>
     <h3 class="card-header">Derniers sujet</h3>

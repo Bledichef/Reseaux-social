@@ -233,6 +233,7 @@ const store = createStore({
             localStorage.removeItem("Messageid");
           })
           .catch(function (error) {
+            alert("vous ne pouvez pas effectué cette action");
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);
@@ -257,6 +258,7 @@ const store = createStore({
             localStorage.removeItem("Messageid");
           })
           .catch(function (error) {
+            alert("vous ne pouvez pas effectué cette action");
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);
@@ -376,6 +378,7 @@ const store = createStore({
             localStorage.removeItem("Commentid");
           })
           .catch(function (error) {
+            alert("vous ne pouvez pas effectué cette action");
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);
@@ -401,6 +404,7 @@ const store = createStore({
             localStorage.removeItem("Commentid");
           })
           .catch(function (error) {
+            alert("vous ne pouvez pas effectué cette action");
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);

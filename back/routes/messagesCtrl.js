@@ -29,13 +29,11 @@ module.exports = {
         error: " le Titre ou le contenu de votre article sont trop court",
       });
     }
-    console.log(title);
-    console.log(content);
+
     asynclib.waterfall(
       [
         function (done) {
           models.User.findOne({
-            attributes: ["username", "id"],
             where: { id: userId },
           })
             .then(function (userFound) {
@@ -52,7 +50,7 @@ module.exports = {
               content: content,
               likes: 0,
               UserId: userFound.id,
-              Users: userFound,
+              User: userFound.username,
               // attachement: `${req.protocol}://${req.get("host")}/images/${
               // req.file.filename
               // }`,
@@ -87,7 +85,7 @@ module.exports = {
     }
 
     models.Message.findAll({
-      include: [models.User],
+      include: models.User,
       order: [order != null ? order.split(":") : ["title", "ASC"]],
       attributes: fields !== "*" && fields != null ? fields.split(",") : null,
       limit: !isNaN(limit) ? limit : null,
