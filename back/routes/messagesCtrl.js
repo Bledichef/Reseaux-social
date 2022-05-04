@@ -34,10 +34,12 @@ module.exports = {
       [
         function (done) {
           models.User.findOne({
+            attributes: ["username", "id"],
             where: { id: userId },
           })
             .then(function (userFound) {
               done(null, userFound);
+              console.log(userFound);
             })
             .catch(function (err) {
               return res.status(500).json({ error: " utilisateur non trouvé" });
@@ -50,7 +52,7 @@ module.exports = {
               content: content,
               likes: 0,
               UserId: userFound.id,
-              User: userFound.userName,
+              username: userFound.username,
               // attachement: `${req.protocol}://${req.get("host")}/images/${
               // req.file.filename
               // }`,
@@ -86,6 +88,7 @@ module.exports = {
 
     models.Message.findAll({
       include: models.User,
+
       order: [order != null ? order.split(":") : ["title", "ASC"]],
       attributes: fields !== "*" && fields != null ? fields.split(",") : null,
       limit: !isNaN(limit) ? limit : null,

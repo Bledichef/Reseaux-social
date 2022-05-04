@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
     "Message",
 
     {
-      userId: {
-        type: DataTypes.INTEGER,
+      username: {
+        type: DataTypes.STRING,
         references: {
-          model: "user",
-          key: "id",
+          model: "Users",
+          key: "username",
         },
       },
       title: DataTypes.STRING,
@@ -25,12 +25,9 @@ module.exports = (sequelize, DataTypes) => {
           models.Message.belongsTo(models.User, {
             onDelete: "CASCADE",
           });
-          models.Message.belongsTo(models.Comment, {
-            foreignKey: {
-              allowNull: true,
-            },
-            onDelete: "CASCADE",
-          });
+          // models.Message.belongsTo(models.Comment, {
+          //   onDelete: "CASCADE",
+          // });
         },
       },
     }

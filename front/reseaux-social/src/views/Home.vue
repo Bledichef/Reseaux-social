@@ -67,7 +67,7 @@
         id du message => {{ Message.id }}
         <div class="content">Contenu du message {{ Message.content }}</div>
         <div class="User">
-          <!-- Createur du message => {{ Message.Users[0].username }} -->
+          Createur du message => {{ Message.username }}
           {{ Message.UserId }}
         </div>
         <div class="like">

@@ -20,15 +20,19 @@ module.exports = {
         },
       },
 
-      commentId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-      },
-      commentContent: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-      },
+      // commentId: {
+      //   allowNull: false,
+      //   type: Sequelize.INTEGER,
+      // },
+      // commentContent: {
+      //   allowNull: false,
+      //   type: Sequelize.INTEGER,
+      // },
       title: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      username: {
         allowNull: false,
         type: Sequelize.STRING,
       },
