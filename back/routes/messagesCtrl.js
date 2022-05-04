@@ -50,7 +50,7 @@ module.exports = {
               content: content,
               likes: 0,
               UserId: userFound.id,
-              User: userFound.username,
+              User: userFound.userName,
               // attachement: `${req.protocol}://${req.get("host")}/images/${
               // req.file.filename
               // }`,
