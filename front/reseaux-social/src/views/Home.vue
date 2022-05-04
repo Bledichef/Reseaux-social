@@ -381,6 +381,8 @@ computed: {
   width: 200%;
 }
 .Commentaires {
+  margin-left: 20px;
+  margin-right: 20px;
   margin-block-start: 15px;
   margin-block-end: 15px;
   border-radius: 50px;
