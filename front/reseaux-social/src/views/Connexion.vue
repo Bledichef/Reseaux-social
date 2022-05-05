@@ -4,16 +4,26 @@
   <h1 class="card_title" v-if="mode == 'create'">Se Créer un Compte</h1>
   <p class="card__subtitle" v-if="mode == 'login'">
     Tu n'as pas encore de compte?
-    <span class="card_action" @click="switchToCreateAccount()">
+    <span
+      class="card_action"
+      @click="switchToCreateAccount()"
+      aria-label="passé en mode inscription"
+    >
       Créer un compte
     </span>
   </p>
   <p class="card__subtitle" v-if="mode == 'create'">
     Tu as déjà un compte ?
-    <span class="card_action" @click="switchToLogin()">Se connecter</span>
+    <span
+      class="card_action"
+      @click="switchToLogin()"
+      aria-label="passé en mode login"
+      >Se connecter</span
+    >
   </p>
   <div class="form_input">
     <input
+      aria-label="input email"
       v-model="email"
       class="form-row"
       type="text"
@@ -21,6 +31,7 @@
     />
 
     <input
+      aria-label="input Nom et prenom de l'utilisateur"
       v-model="username"
       class="form-row"
       v-if="mode == 'create'"
@@ -29,6 +40,7 @@
     />
 
     <input
+      aria-label="input mot de passe "
       v-model="password"
       class="form-row"
       type="text"
@@ -36,6 +48,7 @@
     />
 
     <input
+      aria-label="input Job de l'utilisateur"
       v-model="job"
       class="form-row"
       v-if="mode == 'create'"
@@ -44,6 +57,7 @@
     />
   </div>
   <button
+    aria-label="boutton validation login"
     @click="login()"
     class="button"
     :class="{ 'button--disabled': !validatedFields }"
@@ -53,6 +67,7 @@
     <span v-else>Connexion</span>
   </button>
   <button
+    aria-label="boutton validation creation de compte"
     @click="createAccount()"
     class="button"
     :class="{ 'button--disabled': !validatedFields }"

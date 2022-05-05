@@ -9,21 +9,48 @@
   </div>
 
   <div class="form-row">
-    <button @click="logout()" class="button">
+    <button
+      aria-label="Boutton pour se déconnecter"
+      @click="logout()"
+      class="button"
+    >
       <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
     </button>
-    <button class="button" @click="switchToUpdate()">
+    <button
+      aria-label="Boutton pour  passer en mode modification du profil"
+      class="button"
+      @click="switchToUpdate()"
+    >
       <i class="fa-solid fa-pen-to-square"></i> Modifié Compte
     </button>
     <div class="upadte_user" v-if="mode == 'update'">
-      <input v-model="username" type="text" placeholder="Nom et prenom" />
-      <input v-model="job" class="form-row" type="text" placeholder="Emploi" />
-      <button class="button" @click="updateAccount()">
+      <input
+        aria-label="input pour modifier son nom et prenom"
+        v-model="username"
+        type="text"
+        placeholder="Nom et prenom"
+      />
+      <input
+        aria-label="input pour modifier son job"
+        v-model="job"
+        class="form-row"
+        type="text"
+        placeholder="Emploi"
+      />
+      <button
+        aria-label="Boutton pour valider la modification du profil"
+        class="button"
+        @click="updateAccount()"
+      >
         Enregistrer les modifications
       </button>
     </div>
 
-    <button class="button" @click="deleteAccount()">
+    <button
+      aria-label="Boutton pour supprimer le profil"
+      class="button"
+      @click="deleteAccount()"
+    >
       <i class="fa-solid fa-trash"></i> Supprimé Compte
     </button>
   </div>

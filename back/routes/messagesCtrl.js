@@ -9,6 +9,22 @@ const message = require("../models/message");
 // Routes
 module.exports = {
   createMessage: function (req, res) {
+    const attachementimage = JSON.parse(req.body.attachement);
+    // var attachement = multer(attachementimage);
+    delete attachementimage._id;
+    const attachement = new attachement({
+      ...messageattachement,
+      multer(attachementimage) {
+        attachement: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`;
+      },
+    });
+    attachement
+      .save()
+      .then(() => res.status(201).json({ message: "Objet enregistré !" }))
+      .catch((error) => res.status(400).json({ error }));
+
     // Getting auth header
     var headerAuth = req.headers["authorization"];
     var userId = jwtUtils.getUserId(headerAuth);
@@ -53,9 +69,7 @@ module.exports = {
               likes: 0,
               UserId: userFound.id,
               username: userFound.username,
-              // attachement: `${req.protocol}://${req.get("host")}/images/${
-              // req.file.filename
-              // }`,
+              attachement: "attachementimage",
             }).then(function (newMessage) {
               done(newMessage);
             });
