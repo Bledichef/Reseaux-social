@@ -48,7 +48,7 @@
 
     <button
       aria-label="Boutton pour supprimer le profil"
-      class="button"
+      class="buttonDelete"
       @click="deleteAccount()"
     >
       <i class="fa-solid fa-trash"></i> Supprimé Compte
@@ -135,11 +135,18 @@ export default {
   margin-block-end: 30px;
   margin-block-start: 20px;
 }
-.button {
-  color: #0d07cd;
+.buttonDelete {
+  color: #ffffff;
   border-style: outset;
-  border-radius: 10%;
-  background-color: antiquewhite;
+  border-color: rgb(230, 122, 110);
+  border-radius: 15%;
+  background-color: rgb(252, 5, 5);
+  /* margin-block-start: 5px;
+  margin-block-end: 5px; */
+  opacity: 0.8;
+}
+.buttonDelete:hover {
+  opacity: 1;
 }
 .form-row {
   display: flex;

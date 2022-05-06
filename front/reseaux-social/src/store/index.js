@@ -207,6 +207,7 @@ const store = createStore({
             commit(response.data);
             resolve(response);
             console.log(response);
+            window.location.reload(true);
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");
@@ -231,6 +232,7 @@ const store = createStore({
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
+            window.location.reload(true);
           })
           .catch(function (error) {
             alert("vous ne pouvez pas effectué cette action");
@@ -256,6 +258,7 @@ const store = createStore({
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
+            window.location.reload(true);
           })
           .catch(function (error) {
             alert("vous ne pouvez pas effectué cette action");
@@ -351,6 +354,7 @@ const store = createStore({
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
+            window.location.reload(true);
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");
@@ -376,6 +380,7 @@ const store = createStore({
             console.log(response);
             localStorage.removeItem("Messageid");
             localStorage.removeItem("Commentid");
+            window.location.reload(true);
           })
           .catch(function (error) {
             alert("vous ne pouvez pas effectué cette action");
@@ -402,6 +407,7 @@ const store = createStore({
             console.log(response);
             localStorage.removeItem("Messageid");
             localStorage.removeItem("Commentid");
+            window.location.reload(true);
           })
           .catch(function (error) {
             alert("vous ne pouvez pas effectué cette action");

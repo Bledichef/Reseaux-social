@@ -68,7 +68,7 @@
           </button>
           <button
             aria-label="Boutton pour supprimer le message"
-            class="button"
+            class="buttonDelete"
             v-if="mode == 'modifyMessage'"
             @click="deleteMessages(Message.id)"
           >
@@ -105,7 +105,7 @@
             </button>
           </div>
         </div>
-        <div class="creation">date création {{ Message.createdAt }}</div>
+        <div class="creation">Date création {{ Date(Message.createdAt) }}</div>
       </div>
       <div class="Commentaires">
         <button
@@ -115,7 +115,6 @@
         >
           Affiché les comm
         </button>
-        <p>Les commentaires seront ici</p>
 
         <div class="com" v-for="comments in comment" :key="comments">
           <div class="Grand-Com" v-if="Message.id == comments.messageId">
@@ -125,10 +124,20 @@
             <p class="Post_Comment">
               {{ comments.content }}
             </p>
-            <div class="date_Post_Comment">
-              date de création du commentaire: {{ comments.createdAt }}
+            <div
+              class="date_Post_Comment"
+              v-if="comments.createdAt === comments.updatedAt"
+            >
+              date de création du commentaire:
+              {{ Date(comments.createdAt) }}
             </div>
-
+            <div
+              class="date_Edit_Comment"
+              v-if="comments.createdAt != comments.updatedAt"
+            >
+              date de Modification du commentaire:
+              {{ Date(comments.createdAt) }}
+            </div>
             <div class="modif_Comm">
               <button
                 aria-label="Boutton pour modifier le commentaire"
@@ -156,7 +165,7 @@
               </button>
               <button
                 aria-label="Boutton pour supprimer le commentaire"
-                class="button"
+                class="buttonDelete"
                 @click="deleteComment(Message.id, comments.id)"
                 v-if="mode == 'modifyComment'"
               >
@@ -251,7 +260,7 @@ export default {
           console.log(error);
         };
 
-      this.$router.push("/Enregistrer");
+      // this.$router.push("/Enregistrer");
     },
     updateMessages: function (Messageid) {
       console.log(Messageid);
@@ -269,7 +278,7 @@ export default {
         function (error) {
           console.log(error);
         };
-      this.$router.push("/Enregistrer");
+      // this.$router.push("/Enregistrer");
     },
     deleteMessages: function (Messageid) {
       console.log(Messageid);
@@ -282,10 +291,11 @@ export default {
         function (error) {
           console.log(error);
         };
-      this.$router.push("/Enregistrer");
+      // this.$router.push("/Enregistrer");
     },
     likeMessages: function (Messageid) {
       console.log(Messageid);
+
       localStorage.setItem("Messageid", JSON.stringify(Messageid));
       this.$store.dispatch("likeMessage").then(function (response) {
         console.log(response);
@@ -331,8 +341,13 @@ export default {
         function (error) {
           console.log(error);
         };
-
-      this.$router.push("/Enregistrer");
+      this.$store.dispatch("GetComment").then(function (response) {
+        console.log(localStorage.Comment);
+      }),
+        function (error) {
+          console.log(error);
+        };
+      // this.$router.push("/Enregistrer");
     },
     updateComment: function (Messageid, Commentid) {
       console.log(Messageid);
@@ -351,7 +366,8 @@ export default {
         function (error) {
           console.log(error);
         };
-      this.$router.push("/Enregistrer");
+
+      // this.$router.push("/Enregistrer");
     },
     deleteComment: function (Messageid, Commentid) {
       console.log(Messageid);
@@ -366,7 +382,7 @@ export default {
         function (error) {
           console.log(error);
         };
-      this.$router.push("/Enregistrer");
+      // this.$router.push("/Enregistrer");
     },
   },
 };
@@ -378,13 +394,20 @@ computed: {
   color: #6d68f5;
   border-style: outset;
   border-color: rgb(230, 122, 110);
-  border-radius: 25%;
+  border-radius: 15%;
   background-color: antiquewhite;
   margin-block-start: 5px;
   margin-block-end: 5px;
+  opacity: 0.8;
+}
+.button:hover {
+  opacity: 1;
+  animation: shake 0.5s;
 }
 .messages {
-  display: inline-block;
+  display: flow-root;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 /* .Title-message {
   border-style: outset;
@@ -417,12 +440,50 @@ computed: {
   border-radius: 20px;
   border-style: dotted;
   border-color: rgb(230, 122, 110);
-  margin-block-start: 10px;
+  margin-block-start: 20px;
+  margin-block-end: 20px;
 }
 .Message {
   border-radius: 20px;
   border-style: dotted;
   border-color: rgb(230, 122, 110);
   margin-block-start: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 </style>

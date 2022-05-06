@@ -32,12 +32,18 @@ export default {
   color: #086fd6;
 }
 a {
+  opacity: 0.8;
   text-decoration: none;
   color: #0d07cd;
 }
 .router-link-active {
   font-weight: bold;
   color: blueviolet;
+}
+
+a:hover {
+  opacity: 1;
+  font-weight: bold;
 }
 .logo {
   max-width: 25%;
