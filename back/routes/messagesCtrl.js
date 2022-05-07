@@ -9,21 +9,21 @@ const message = require("../models/message");
 // Routes
 module.exports = {
   createMessage: function (req, res) {
-    // const attachementimage = JSON.parse(req.body.attachement);
-    // // var attachement = multer(attachementimage);
-    // delete attachementimage._id;
-    // const attachement = new attachement({
-    //   ...messageattachement,
-    //   multer(attachementimage) {
-    //     attachement: `${req.protocol}://${req.get("host")}/images/${
-    //       req.file.filename
-    //     }`;
-    //   },
-    // });
-    // attachement
-    //   .save()
-    //   .then(() => res.status(201).json({ message: "Objet enregistré !" }))
-    //   .catch((error) => res.status(400).json({ error }));
+    const attachementimage = JSON.parse(req.body.attachement);
+    // var attachement = multer(attachementimage);
+    delete attachementimage._id;
+    const attachement = new attachement({
+      ...messageattachement,
+      multer(attachementimage) {
+        attachement: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`;
+      },
+    });
+    attachement
+      .save()
+      .then(() => res.status(201).json({ message: "Objet enregistré !" }))
+      .catch((error) => res.status(400).json({ error }));
 
     // Getting auth header
     var headerAuth = req.headers["authorization"];
@@ -61,6 +61,7 @@ module.exports = {
               return res.status(500).json({ error: " utilisateur non trouvé" });
             });
         },
+
         function (userFound, done) {
           if (userFound) {
             models.Message.create({
