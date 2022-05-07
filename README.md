@@ -18,11 +18,16 @@ Procedure à suivre pour la mise en place du projet
 Installer wamp Server
 Copier de le repository 
 Puis exécuter les commande suivante : 
+
 cd backend 
-&& npm install 
-&& sequelize db:create 
-&& sequelize db:migrate
-&& nodemon server
+
+ npm install 
+
+ sequelize db:create 
+
+ sequelize db:migrate
+
+ nodemon server
 
 lancer le server sur wamp server
 Puis ouvrez la page index dans \front\reseaux-social\dist\  avec votre explortateur favoris
