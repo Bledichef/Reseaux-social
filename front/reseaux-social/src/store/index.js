@@ -51,6 +51,7 @@ const store = createStore({
         token: "",
       };
       localStorage.removeItem("user");
+      window.location.reload(true);
     },
     deleteUser: function (state, userInfos, user) {
       console.log(userInfos);

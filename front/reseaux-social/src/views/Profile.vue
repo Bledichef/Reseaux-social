@@ -89,7 +89,7 @@ export default {
 
     logout: function () {
       this.$store.commit("logout");
-      this.$router.push("/Connexion/");
+      // this.$router.push("/Connexion/");
     },
 
     updateAccount: function () {

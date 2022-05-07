@@ -5,6 +5,7 @@ import Connexion from "@/views/Connexion.vue";
 import NotFound from "@/views/NotFound.vue";
 import Profile from "@/views/Profile";
 import Enregistrer from "@/views/Enregistrer";
+import css from "@/views/w3vue.css.vue";
 
 const routes = [
   {

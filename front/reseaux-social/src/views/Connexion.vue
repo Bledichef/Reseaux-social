@@ -25,7 +25,7 @@
     <input
       aria-label="input email"
       v-model="email"
-      class="form-row"
+      class="w3-border-red"
       type="text"
       placeholder="Adresse mail"
     />
