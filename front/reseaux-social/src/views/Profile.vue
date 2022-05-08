@@ -1,11 +1,22 @@
 <template>
-  <h1 class="card__title">Espace Perso</h1>
+  <h1 class="card__title">A propos de vous</h1>
 
-  <p class="card__subtitle">A propos de vous</p>
-  <div class="card_user">
-    <p class="MAil">Adresse Mail: {{ user.email }}</p>
-    <p class="User">Nom de l'utilisateur: {{ user.username }}</p>
-    <p class="Job">Fonction: {{ user.job }}</p>
+  <div class="card_user w3-container w3-center w3-animate-top">
+    <p
+      class="MAil w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-amber"
+    >
+      Adresse Mail: {{ user.email }}
+    </p>
+    <p
+      class="User w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-amber"
+    >
+      Nom de l'utilisateur: {{ user.username }}
+    </p>
+    <p
+      class="Job w3-topbar w3-bottombar w3-leftbar w3-rightbar w3-border-amber"
+    >
+      Fonction: {{ user.job }}
+    </p>
   </div>
 
   <div class="form-row">
@@ -25,6 +36,7 @@
     </button>
     <div class="upadte_user" v-if="mode == 'update'">
       <input
+        class="w3-border-red w3-round-xlarge"
         aria-label="input pour modifier son nom et prenom"
         v-model="username"
         type="text"
@@ -33,7 +45,7 @@
       <input
         aria-label="input pour modifier son job"
         v-model="job"
-        class="form-row"
+        class="w3-border-red w3-round-xlarge"
         type="text"
         placeholder="Emploi"
       />
@@ -64,7 +76,7 @@ export default {
   mounted: function () {
     console.log(localStorage.user);
     // console.log(this.$store.state.user);
-    if (localStorage.userId == -1) {
+    if (localStorage.userId == -1 || localStorage.user == undefined) {
       this.$router.push("/");
       return;
     }
@@ -85,6 +97,9 @@ export default {
   methods: {
     switchToUpdate: function () {
       this.mode = "update";
+    },
+    switchToNotLogin: function () {
+      this.mode = "createAccount";
     },
 
     logout: function () {
@@ -147,6 +162,7 @@ export default {
 }
 .buttonDelete:hover {
   opacity: 1;
+  animation: shake 0.5s;
 }
 .form-row {
   display: flex;

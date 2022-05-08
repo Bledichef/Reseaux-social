@@ -1,7 +1,11 @@
 <template>
   <nav>
     <header>
-      <img class="logo" alt=" logo" src="./assets/logoReseau.png" />
+      <img
+        class="logo w3-animate-fading"
+        alt=" logo"
+        src="./assets/logoReseau.png"
+      />
     </header>
     <!-- <img src="./assets/logoReseau.png" /> -->
     <router-link to="/Home/">Home</router-link> |
@@ -46,7 +50,7 @@ a:hover {
   font-weight: bold;
 }
 .logo {
-  max-width: 25%;
+  max-width: 22%;
   max-height: 5%;
 }
 .fa-thumbs-up {

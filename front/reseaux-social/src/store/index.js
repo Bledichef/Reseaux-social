@@ -211,6 +211,9 @@ const store = createStore({
             window.location.reload(true);
           })
           .catch(function (error) {
+            alert(
+              "Pensez à vous identifier avant de poster, si vous n'avez pas encore de compte creer en un sur la page de connexion"
+            );
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);
@@ -288,6 +291,9 @@ const store = createStore({
             window.location.reload(true);
           })
           .catch(function (error) {
+            alert(
+              "Pensez à vous identifier avant de liker, si vous n'avez pas encore de compte creer en un sur la page de connexion"
+            );
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);
@@ -313,6 +319,9 @@ const store = createStore({
             window.location.reload(true);
           })
           .catch(function (error) {
+            alert(
+              "Pensez à vous identifier avant de disliker, si vous n'avez pas encore de compte creer en un sur la page de connexion"
+            );
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);
@@ -358,6 +367,9 @@ const store = createStore({
             window.location.reload(true);
           })
           .catch(function (error) {
+            alert(
+              "Pensez à vous identifier avant de poster, si vous n'avez pas encore de compte creer en un sur la page de connexion"
+            );
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);

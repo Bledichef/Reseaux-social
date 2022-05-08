@@ -25,7 +25,7 @@
     <input
       aria-label="input email"
       v-model="email"
-      class="w3-border-red"
+      class="w3-border-red w3-hover-red"
       type="text"
       placeholder="Adresse mail"
     />
@@ -33,7 +33,7 @@
     <input
       aria-label="input Nom et prenom de l'utilisateur"
       v-model="username"
-      class="form-row"
+      class="w3-border-red w3-hover-red"
       v-if="mode == 'create'"
       type="text"
       placeholder="Nom et prénom"
@@ -42,7 +42,7 @@
     <input
       aria-label="input mot de passe "
       v-model="password"
-      class="form-row"
+      class="w3-border-red w3-hover-red"
       type="text"
       placeholder="Mot de passe"
     />
@@ -50,7 +50,7 @@
     <input
       aria-label="input Job de l'utilisateur"
       v-model="job"
-      class="form-row"
+      class="w3-border-red w3-hover-red"
       v-if="mode == 'create'"
       type="text"
       placeholder="Emploi"
@@ -92,6 +92,7 @@ export default {
       job: "",
     };
   },
+
   computed: {
     validatedFields: function () {
       if (this.mode == "create") {

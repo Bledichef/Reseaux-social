@@ -1,14 +1,14 @@
 <template>
   <h1>Bienvenue</h1>
-  <div class="messages">
-    <button @click="switchToCreateMessage()" v-if="mode == ''" class="button">
+  <div class="messages w3-container">
+    <button @click="switchToCreateMessage()" class="button w3-round-large">
       créer un post
     </button>
     <input
       aria-label="input Titre du message"
       v-model="title"
       v-if="mode == 'createMessage'"
-      class="form-row1"
+      class="w3-border-red w3-round-xlarge"
       type="text"
       placeholder="Titre"
     />
@@ -16,13 +16,13 @@
       aria-label="input contenu du message"
       v-model="content"
       v-if="mode == 'createMessage'"
-      class="form-row1"
+      class="w3-border-red w3-round-xlarge"
       type="text"
       placeholder="Contenu"
     />
     <button
       aria-label="boutton validation creation du message"
-      class="button"
+      class="button w3-round-xlarge"
       v-if="mode == 'createMessage'"
       @click="createMessage()"
     >
@@ -30,23 +30,30 @@
     </button>
     <h3 class="card-header">Derniers sujet</h3>
 
-    <div class="card-body" v-for="Message in messages" :key="Message.id">
+    <div
+      class="card-body w3-container w3-animate-zoom"
+      v-for="Message in messages"
+      :key="Message.id"
+    >
       <div class="Message">
-        <div class="Title-message">Titre message {{ Message.title }}</div>
-        <div class="modify">
+        <div class="Title-message w3-bottombar w3-xxlarge">
+          {{ Message.title }}
+        </div>
+        <div class="modify w3-cell-row">
           <button
+            v-if="mode == ''"
             @click="switchToModifyMessage()"
-            class="button"
+            class="button w3-round w3-small"
             aria-label="boutton pour passer en mode modification du message"
           >
-            Modifié
+            Modifier
           </button>
 
           <input
             aria-label="input pour rentrer le titre modifié"
             v-model="title_modify"
             v-if="mode == 'modifyMessage'"
-            class="form-row1"
+            class="w3-border-red w3-round-xlarge w3-cell w3-mobile"
             type="text"
             placeholder="Titre modifié"
           />
@@ -54,13 +61,13 @@
             aria-label="input pour le contenu modifié"
             v-model="content_modify"
             v-if="mode == 'modifyMessage'"
-            class="form-row1"
+            class="w3-border-red w3-round-xlarge w3-cell w3-mobile"
             type="text"
             placeholder="contenu modifié"
           />
           <button
             aria-label="Boutton pour sauvegarder la modification du message"
-            class="button"
+            class="button w3-round-xlarge w3-cell w3-mobile"
             v-if="mode == 'modifyMessage'"
             @click="updateMessages(Message.id)"
           >
@@ -68,18 +75,16 @@
           </button>
           <button
             aria-label="Boutton pour supprimer le message"
-            class="buttonDelete"
+            class="buttonDelete w3-round-xlarge w3-cell w3-mobile"
             v-if="mode == 'modifyMessage'"
             @click="deleteMessages(Message.id)"
           >
             Supprimer le poste
           </button>
         </div>
-        id du message => {{ Message.id }}
-        <div class="content">Contenu du message {{ Message.content }}</div>
-        <div class="User">
-          Createur du message => {{ Message.username }}
-          {{ Message.UserId }}
+        <div class="content w3-border w3-card-2">
+          <p class="w3-xlarge">{{ Message.content }}</p>
+          <p w3-small>Createur du message {{ Message.username }}</p>
         </div>
         <div class="like">
           like =>
@@ -89,7 +94,7 @@
           <div class="like-dislike-icon">
             <button
               aria-label="Boutton pour liker le message"
-              class="button-like"
+              class="button-like w3-round-xlarge w3-border-red"
               @click="likeMessages(Message.id)"
               :key="like"
             >
@@ -98,22 +103,24 @@
             {{ Message.likes }}
             <button
               aria-label="Boutton pour disliker le message"
-              class="button-dislike"
+              class="button-dislike w3-round-xlarge w3-border-red"
               @click="dislikeMessages(Message.id)"
             >
               <i class="fa-solid fa-thumbs-down"></i>
             </button>
           </div>
         </div>
-        <div class="creation">Date création {{ Date(Message.createdAt) }}</div>
+        <div class="creation w3-tiny">
+          Date création {{ Date(Message.createdAt) }}
+        </div>
       </div>
       <div class="Commentaires">
         <button
           aria-label="Boutton pour afficher les commentaires du message"
           @click="GetComments(Message.id)"
-          class="button"
+          class="button w3-round-xlarge"
         >
-          Affiché les comm
+          Affiché les commentaires
         </button>
 
         <div class="com" v-for="comments in comment" :key="comments">
@@ -121,43 +128,43 @@
             <div class="User_Post_Comment">
               {{ comments.User.username }} à poster un commentaire
             </div>
-            <p class="Post_Comment">
+            <p class="Post_Comment w3-border w3-card-2 w3-xlarge">
               {{ comments.content }}
             </p>
             <div
-              class="date_Post_Comment"
+              class="date_Post_Comment w3-tiny"
               v-if="comments.createdAt === comments.updatedAt"
             >
-              date de création du commentaire:
+              Date de création du commentaire:
               {{ Date(comments.createdAt) }}
             </div>
             <div
-              class="date_Edit_Comment"
+              class="date_Edit_Comment w3-tiny"
               v-if="comments.createdAt != comments.updatedAt"
             >
-              date de Modification du commentaire:
+              Date de Modification du commentaire:
               {{ Date(comments.createdAt) }}
             </div>
             <div class="modif_Comm">
               <button
                 aria-label="Boutton pour modifier le commentaire"
                 @click="switchToModifyComment()"
-                class="button"
+                class="button w3-round-xlarge"
                 v-if="mode == ''"
               >
-                modifié le commentaire
+                Modifié le commentaire
               </button>
               <input
                 aria-label="input pour le contenue modifier du commentaire"
                 v-model="Comment_Content_modify"
                 v-if="mode == 'modifyComment'"
-                class="form-row1"
+                class="w3-border-red w3-round-xlarge"
                 type="text"
                 placeholder="contenu modifié"
               />
               <button
                 aria-label="Boutton pour valider la modification du message"
-                class="button"
+                class="button w3-round-xlarge"
                 @click="updateComment(Message.id, comments.id)"
                 v-if="mode == 'modifyComment'"
               >
@@ -165,7 +172,7 @@
               </button>
               <button
                 aria-label="Boutton pour supprimer le commentaire"
-                class="buttonDelete"
+                class="buttonDelete w3-round-xlarge"
                 @click="deleteComment(Message.id, comments.id)"
                 v-if="mode == 'modifyComment'"
               >
@@ -177,18 +184,18 @@
         <input
           aria-label="input pour contenu d'un commentaire"
           v-model="Post_comment"
-          class="form-row1"
+          class="w3-border-red w3-round-xlarge"
           type="text"
           placeholder="Poster un commentaire"
           v-if="mode == ''"
         />
         <button
           aria-label="Boutton pour valider le poste du commentaire"
-          class="button"
+          class="button w3-round-xlarge"
           v-if="mode == ''"
           @click="createComments(Message.id, Commentid)"
         >
-          poster le commentaire
+          Poster le commentaire
         </button>
       </div>
     </div>
@@ -221,6 +228,12 @@ export default {
     // console.log(data);
   },
   mounted() {
+    console.log(localStorage.user);
+    // console.log(this.$store.state.user);
+    if (localStorage.userId == -1 || localStorage.user == undefined) {
+      this.$router.push("/");
+      return;
+    }
     if (localStorage.Comment) {
       this.comment = JSON.parse(localStorage.Comment);
       // console.log(localStorage.Comment);
@@ -398,9 +411,23 @@ computed: {
   background-color: antiquewhite;
   margin-block-start: 5px;
   margin-block-end: 5px;
-  opacity: 0.8;
+  opacity: 0.6;
 }
 .button:hover {
+  opacity: 1;
+  animation: shake 0.5s;
+}
+.button-like {
+  opacity: 0.6;
+}
+.button-like:hover {
+  opacity: 1;
+  animation: shake 0.5s;
+}
+.button-dislike {
+  opacity: 0.6;
+}
+.button-dislike:hover {
   opacity: 1;
   animation: shake 0.5s;
 }
@@ -432,16 +459,16 @@ computed: {
 .Commentaires {
   margin-left: 20px;
   margin-right: 20px;
-  margin-block-start: 15px;
-  margin-block-end: 15px;
+  /* margin-block-start: 15px;
+  margin-block-end: 15px; */
   border-radius: 50px;
 }
 .Grand-Com {
   border-radius: 20px;
   border-style: dotted;
   border-color: rgb(230, 122, 110);
-  margin-block-start: 20px;
-  margin-block-end: 20px;
+  /* margin-block-start: 20px;
+  margin-block-end: 20px; */
 }
 .Message {
   border-radius: 20px;

@@ -3,6 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var apiRouter = require("./apiRouter").router;
 const path = require("path");
+require("dotenv").config();
 
 // Instance server
 var server = express();
