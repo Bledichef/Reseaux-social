@@ -9,6 +9,8 @@ Sequelize
 MySql
 Node.js v14.17.6
 Express
+
+
 Documentation postman de l'api https://documenter.getpostman.com/view/18862066/UyxdMpiE
 
 Frontend : 
