@@ -1,8 +1,11 @@
 <template>
   <h1>Bienvenue</h1>
   <div class="messages w3-container">
-    <button @click="switchToCreateMessage()" class="button w3-round-large">
-      créer un post
+    <button
+      @click="switchToCreateMessage()"
+      class="button w3-border-red w3-round-xlarge"
+    >
+      Créer un message
     </button>
     <input
       aria-label="input Titre du message"
@@ -22,7 +25,7 @@
     />
     <button
       aria-label="boutton validation creation du message"
-      class="button w3-round-xlarge"
+      class="button w3-border-red w3-round-xlarge"
       v-if="mode == 'createMessage'"
       @click="createMessage()"
     >
@@ -43,7 +46,7 @@
           <button
             v-if="mode == ''"
             @click="switchToModifyMessage()"
-            class="button w3-round w3-small"
+            class="button w3-border-red w3-round-xlarge"
             aria-label="boutton pour passer en mode modification du message"
           >
             Modifier
@@ -53,7 +56,7 @@
             aria-label="input pour rentrer le titre modifié"
             v-model="title_modify"
             v-if="mode == 'modifyMessage'"
-            class="w3-border-red w3-round-xlarge w3-cell w3-mobile"
+            class="w3-border-red w3-round-xlarge"
             type="text"
             placeholder="Titre modifié"
           />
@@ -61,13 +64,13 @@
             aria-label="input pour le contenu modifié"
             v-model="content_modify"
             v-if="mode == 'modifyMessage'"
-            class="w3-border-red w3-round-xlarge w3-cell w3-mobile"
+            class="w3-border-red w3-round-xlarge"
             type="text"
             placeholder="contenu modifié"
           />
           <button
             aria-label="Boutton pour sauvegarder la modification du message"
-            class="button w3-round-xlarge w3-cell w3-mobile"
+            class="button w3-border-red w3-round-xlarge"
             v-if="mode == 'modifyMessage'"
             @click="updateMessages(Message.id)"
           >
@@ -75,7 +78,7 @@
           </button>
           <button
             aria-label="Boutton pour supprimer le message"
-            class="buttonDelete w3-round-xlarge w3-cell w3-mobile"
+            class="buttonDelete w3-border-red w3-round-xlarge"
             v-if="mode == 'modifyMessage'"
             @click="deleteMessages(Message.id)"
           >
@@ -118,7 +121,7 @@
         <button
           aria-label="Boutton pour afficher les commentaires du message"
           @click="GetComments(Message.id)"
-          class="button w3-round-xlarge"
+          class="button w3-border-red w3-round-xlarge"
         >
           Affiché les commentaires
         </button>
@@ -149,7 +152,7 @@
               <button
                 aria-label="Boutton pour modifier le commentaire"
                 @click="switchToModifyComment()"
-                class="button w3-round-xlarge"
+                class="buttonw3-border-red w3-round-xlarge"
                 v-if="mode == ''"
               >
                 Modifié le commentaire
@@ -164,7 +167,7 @@
               />
               <button
                 aria-label="Boutton pour valider la modification du message"
-                class="button w3-round-xlarge"
+                class="button w3-border-red w3-round-xlarge"
                 @click="updateComment(Message.id, comments.id)"
                 v-if="mode == 'modifyComment'"
               >
@@ -172,7 +175,7 @@
               </button>
               <button
                 aria-label="Boutton pour supprimer le commentaire"
-                class="buttonDelete w3-round-xlarge"
+                class="buttonDelete w3-border-red w3-round-xlarge"
                 @click="deleteComment(Message.id, comments.id)"
                 v-if="mode == 'modifyComment'"
               >
@@ -191,7 +194,7 @@
         />
         <button
           aria-label="Boutton pour valider le poste du commentaire"
-          class="button w3-round-xlarge"
+          class="button w3-border-red w3-round-xlarge"
           v-if="mode == ''"
           @click="createComments(Message.id, Commentid)"
         >
@@ -403,20 +406,13 @@ computed: {
 }
 </script>
 <style>
-/* .button {
-  color: #6d68f5;
-  border-style: outset;
-  border-color: rgb(230, 122, 110);
-  border-radius: 15%;
-  background-color: antiquewhite;
-  margin-block-start: 5px;
-  margin-block-end: 5px;
-  opacity: 0.6;
+.button {
+  opacity: 0.9;
 }
 .button:hover {
   opacity: 1;
   animation: shake 0.5s;
-}*/
+}
 .button-like {
   opacity: 0.6;
 }
@@ -449,7 +445,7 @@ computed: {
   border-style: groove;
   border-color: rgb(230, 122, 110);
   border-radius: 30px;
-  background-color: antiquewhite;
+  /* background-color: antiquewhite; */
   margin-block-end: 30px;
   margin-block-start: 20px;
 }
