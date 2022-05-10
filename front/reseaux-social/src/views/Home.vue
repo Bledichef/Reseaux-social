@@ -231,7 +231,7 @@ export default {
     console.log(localStorage.user);
     // console.log(this.$store.state.user);
     if (localStorage.userId == -1 || localStorage.user == undefined) {
-      this.$router.push("/");
+      this.$router.push("/Connexion");
       return;
     }
     if (localStorage.Comment) {

@@ -19,7 +19,7 @@ const routes = [
   },
   {
     name: "Connexion",
-    path: "/",
+    path: "/Connexion",
     component: Connexion,
     props: true,
     meta: {
@@ -37,7 +37,7 @@ const routes = [
   },
   {
     name: "Profile",
-    path: "/Profile",
+    path: "/",
     component: Profile,
     props: true,
     meta: {

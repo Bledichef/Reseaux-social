@@ -9,9 +9,9 @@
     </header>
     <!-- <img src="./assets/logoReseau.png" /> -->
     <router-link to="/Home/">Home</router-link> |
-    <router-link to="/">Connexion</router-link> |
+    <router-link to="/Connexion">Connexion</router-link> |
 
-    <router-link to="/Profile">Profil</router-link> |
+    <router-link to="/">Profil</router-link> |
     <!-- <router-link :to="{ name: 'Enregistrer', params: { name: 'Enregistrer' } }" -->
     <!-- >Enregistrer -->
     <!-- </router-link> -->
