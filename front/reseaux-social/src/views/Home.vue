@@ -403,7 +403,7 @@ computed: {
 }
 </script>
 <style>
-.button {
+/* .button {
   color: #6d68f5;
   border-style: outset;
   border-color: rgb(230, 122, 110);
@@ -416,7 +416,7 @@ computed: {
 .button:hover {
   opacity: 1;
   animation: shake 0.5s;
-}
+}*/
 .button-like {
   opacity: 0.6;
 }

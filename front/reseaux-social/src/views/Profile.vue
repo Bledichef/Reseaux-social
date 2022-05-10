@@ -120,8 +120,8 @@ export default {
         function (error) {
           console.log(error);
         };
-      alert("Veuillez vous reconnecter pour actualiser votre profil");
-      this.$router.push("/");
+      // alert("Veuillez vous reconnecter pour actualiser votre profil");
+      // this.$router.push("/");
     },
     deleteAccount: function () {
       alert("Votre compte est supprimé");

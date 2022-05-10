@@ -169,9 +169,10 @@ const store = createStore({
           .put("http://localhost:8080/api/users/me", userInfos)
           .then(function (response) {
             commit("setStatus", "");
-            commit("logUser", response.data);
+            commit("getUserInfos", response.data);
             resolve(response);
             console.log(response);
+            window.location.reload(true);
           })
           .catch(function (error) {
             commit("setStatus", "error_logged");
