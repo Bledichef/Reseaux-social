@@ -156,7 +156,9 @@ const store = createStore({
         .then(function (response) {
           commit("userInfos", response.data);
         })
-        .catch(function () {});
+        .catch(function () {
+          localStorage.removeItem("user");
+        });
     },
     updateUser: ({ commit }, userInfos) => {
       commit("userInfos");
