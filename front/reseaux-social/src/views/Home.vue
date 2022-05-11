@@ -34,7 +34,7 @@
     <h3 class="card-header">Derniers sujet</h3>
 
     <div
-      class="card-body w3-container w3-animate-zoom"
+      class="card-body w3-container w3-animate-zoom w3-card-4"
       v-for="Message in messages"
       :key="Message.id"
     >
@@ -442,9 +442,9 @@ computed: {
   border-color: rgb(230, 122, 110);
 } */
 .card-body {
-  border-style: groove;
+  /* border-style: groove;
   border-color: rgb(230, 122, 110);
-  border-radius: 30px;
+  border-radius: 30px; */
   /* background-color: antiquewhite; */
   margin-block-end: 30px;
   margin-block-start: 20px;
@@ -463,8 +463,8 @@ computed: {
   border-radius: 20px;
   border-style: dotted;
   border-color: rgb(230, 122, 110);
-  /* margin-block-start: 20px;
-  margin-block-end: 20px; */
+  margin-block-start: 20px;
+  margin-block-end: 20px;
 }
 .Message {
   border-radius: 20px;
