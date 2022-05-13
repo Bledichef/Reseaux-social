@@ -98,7 +98,7 @@ module.exports = {
                     .json({ error: "cannot update user reaction" });
                 });
             } else {
-              res.status(409).json({ error: "message already liked" });
+              res.status(409).json({ error: "message deja liked" });
             }
           }
         },

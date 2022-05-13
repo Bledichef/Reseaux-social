@@ -18,7 +18,6 @@ module.exports = {
     if (content == null) {
       return res.status(400).json({ error: " Commentaire vide " });
     }
-
     console.log(content);
     asynclib.waterfall(
       [
@@ -85,19 +84,17 @@ module.exports = {
     models.Comment.findAll({
       where: { messageId: req.params.messageId },
       include: models.User,
-    })
-
-      .then(function (comment) {
-        if (comment) {
-          res.status(200).json(comment);
-        } else {
-          res.status(404).json({ error: "Pas de commentaire trouvé" });
-        }
-      })
-      .catch(function (err) {
-        console.log(err);
-        res.status(500).json({ error: "Champs invalide" });
-      });
+    }).then(function (comment) {
+      if (comment) {
+        res.status(200).json(comment);
+      } else {
+        res.status(404).json({ error: "Pas de commentaire trouvé" });
+      }
+    });
+    // .catch(function (err) {
+    //   console.log(err);
+    //   res.status(500).json({ error: "Champs invalide" });
+    // });
   },
   updateComment: function (req, res, next) {
     // Getting auth header
@@ -106,7 +103,7 @@ module.exports = {
     var isAdmin = jwtUtils.getAdmin(headerAuth);
 
     // Params
-    let title = req.body.title;
+
     let content = req.body.content;
 
     models.Comment.findOne({
@@ -157,9 +154,7 @@ module.exports = {
                   res.status(200).json({ message: "Le post a été supprimé" })
                 )
                 .catch((error) => res.status(400).json({ error }));
-            }
-            // Si le user qui fait la requête n'est ni admin, ni celui qui a créé le post -> suppression KO
-            else {
+            } else {
               return res.status(404).json({
                 error:
                   "Vous n'avez pas l'autorisation de supprimer un post qui ne vous appartient pas",
