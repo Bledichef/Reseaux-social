@@ -123,13 +123,13 @@
           @click="GetComments(Message.id)"
           class="button w3-border-red w3-round-xlarge"
         >
-          Affiché les commentaires
+          Afficher les commentaires
         </button>
 
         <div class="com" v-for="comments in comment" :key="comments">
           <div class="Grand-Com" v-if="Message.id == comments.messageId">
             <div class="User_Post_Comment">
-              {{ comments.User.username }} à poster un commentaire
+              {{ comments.User.username }} à posté un commentaire
             </div>
             <p class="Post_Comment w3-border w3-card-2 w3-xlarge">
               {{ comments.content }}
@@ -155,7 +155,7 @@
                 class="buttonw3-border-red w3-round-xlarge"
                 v-if="mode == ''"
               >
-                Modifié le commentaire
+                Modifier le commentaire
               </button>
               <input
                 aria-label="input pour le contenue modifier du commentaire"

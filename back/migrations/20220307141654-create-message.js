@@ -14,20 +14,13 @@ module.exports = {
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        onDelete: "CASCADE",
         references: {
           model: "Users",
-          key: "id",
+          key: "Id",
         },
       },
 
-      // commentId: {
-      //   allowNull: false,
-      //   type: Sequelize.INTEGER,
-      // },
-      // commentContent: {
-      //   allowNull: false,
-      //   type: Sequelize.INTEGER,
-      // },
       title: {
         allowNull: false,
         type: Sequelize.STRING,
@@ -59,5 +52,8 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Messages");
+    models.Message.belongsTo(models.User, {
+      hooks: true,
+    });
   },
 };

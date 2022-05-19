@@ -23,11 +23,6 @@
     | <router-link to="/Connexion">Connexion</router-link> |
 
     <router-link to="/">Profil</router-link> |
-    <!-- <router-link :to="{ name: 'Enregistrer', params: { name: 'Enregistrer' } }" -->
-    <!-- >Enregistrer -->
-    <!-- </router-link> -->
-    <!-- | -->
-    <!-- <router-link to="/Profile">Profil </router-link> -->
   </nav>
   <router-view />
 </template>
@@ -71,6 +66,6 @@ a:hover {
   color: #0d07cd;
 }
 .fa-heart {
-  color: #0d07cd;
+  color: #cd0707;
 }
 </style>

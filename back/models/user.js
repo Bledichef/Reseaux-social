@@ -15,15 +15,17 @@ module.exports = (sequelize, DataTypes) => {
           // associations can be defined here
           models.User.hasMany(models.Message, {
             foreignKey: {
-              allowNull: false,
+              foreignKey: "id",
+              onDelete: "cascade",
+              hooks: true,
             },
-            onDelete: "CASCADE",
           });
           models.User.hasMany(models.Comment, {
             foreignKey: {
-              allowNull: false,
+              foreignKey: "id",
+              onDelete: "cascade",
+              hooks: true,
             },
-            onDelete: "CASCADE",
           });
         },
       },

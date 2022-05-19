@@ -40,5 +40,12 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable("Users");
+    models.User.hasMany(models.Message, {
+      foreignKey: {
+        foreignKey: "id",
+        onDelete: "cascade",
+        hooks: true,
+      },
+    });
   },
 };

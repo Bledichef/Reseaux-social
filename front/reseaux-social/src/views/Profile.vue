@@ -136,17 +136,6 @@ export default {
 };
 </script>
 <style>
-/* .card_user {
-  border-style: outset;
-  width: 50%;
-  display: inline-block;
-  font-weight: bold;
-  font-size: 110%;
-  border-radius: 50px;
-
-  margin-block-end: 30px;
-  margin-block-start: 20px;
-} */
 .buttonDelete {
   background-color: rgb(252, 5, 5);
   /* margin-block-start: 5px;
