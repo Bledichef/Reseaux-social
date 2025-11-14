@@ -181,10 +181,10 @@
               <p class="comment-content">{{ comments.content }}</p>
               
               <!-- Actions commentaire -->
-              <div class="comment-actions" v-if="mode == ''">
+              <div class="comment-actions" v-if="editingCommentId !== comments.id">
                 <button
                   aria-label="Boutton pour modifier le commentaire"
-                  @click="switchToModifyComment()"
+                  @click="switchToModifyComment(comments.id, comments.content)"
                   class="btn-link"
                 >
                   <i class="fas fa-edit"></i>
@@ -201,10 +201,11 @@
               </div>
 
               <!-- Mode modification commentaire -->
-              <div class="edit-comment-form" v-if="mode == 'modifyComment'">
+              <div class="edit-comment-form" v-if="editingCommentId === comments.id">
                 <textarea
                   aria-label="input pour le contenue modifier du commentaire"
-                  v-model="Comment_Content_modify"
+                  :value="commentEdits[comments.id] || comments.content"
+                  @input="commentEdits[comments.id] = $event.target.value"
                   class="input textarea"
                   placeholder="Contenu modifié"
                   rows="3"
@@ -220,7 +221,7 @@
                   </button>
                   <button
                     class="btn btn-secondary btn-sm"
-                    @click="mode = ''"
+                    @click="cancelEditComment(comments.id)"
                   >
                     Annuler
                   </button>
@@ -279,6 +280,8 @@ export default {
       Post_comment: "",
       Comment_Content_modify: "",
       like: 0,
+      editingCommentId: null, // ID du commentaire en cours de modification
+      commentEdits: {}, // Objet pour stocker les modifications par commentaire ID
     };
   },
   async created() {
@@ -326,8 +329,15 @@ export default {
     switchToModifyMessage() {
       this.mode = "modifyMessage";
     },
-    switchToModifyComment() {
-      this.mode = "modifyComment";
+    switchToModifyComment(commentId, currentContent) {
+      this.editingCommentId = commentId;
+      // Initialiser la valeur de modification avec le contenu actuel
+      this.$set(this.commentEdits, commentId, currentContent);
+    },
+    cancelEditComment(commentId) {
+      this.editingCommentId = null;
+      // Supprimer la modification en cours
+      this.$delete(this.commentEdits, commentId);
     },
     createMessage() {
       this.$store
@@ -423,15 +433,17 @@ export default {
         });
     },
     updateComment(Messageid, Commentid) {
+      const content = this.commentEdits[Commentid] || this.Comment_Content_modify || this.content_modify;
       this.$store
         .dispatch("updateComment", {
           messageId: Messageid,
           commentId: Commentid,
-          content: this.Comment_Content_modify || this.content_modify,
+          content: content,
         })
         .then((response) => {
           console.log(response);
-          this.mode = "";
+          this.editingCommentId = null;
+          this.$delete(this.commentEdits, Commentid);
           window.location.reload();
           localStorage.removeItem("Comment");
         })

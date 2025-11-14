@@ -16,14 +16,22 @@
             <i class="fas fa-home"></i>
             <span>Accueil</span>
           </router-link>
-          <router-link to="/" class="nav-link">
+          <router-link to="/" class="nav-link" v-if="isAuthenticated">
             <i class="fas fa-user"></i>
             <span>Profil</span>
           </router-link>
-          <router-link to="/Connexion" class="nav-link">
+          <router-link to="/Connexion" class="nav-link" v-if="!isAuthenticated">
             <i class="fas fa-sign-in-alt"></i>
             <span>Connexion</span>
           </router-link>
+          <button 
+            v-if="isAuthenticated" 
+            @click="logout()" 
+            class="nav-link nav-link-button"
+          >
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Déconnexion</span>
+          </button>
         </div>
       </div>
     </nav>
@@ -34,9 +42,32 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "App",
-  methods: {},
+  computed: {
+    ...mapState({
+      user: "user",
+    }),
+    isAuthenticated() {
+      // Vérifier si l'utilisateur est connecté
+      const user = localStorage.getItem("user");
+      if (!user) return false;
+      try {
+        const userData = JSON.parse(user);
+        return userData && userData.userId && userData.userId !== -1 && userData.token;
+      } catch (e) {
+        return false;
+      }
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.commit("logout");
+      this.$router.push("/Connexion");
+    },
+  },
 };
 </script>
 
@@ -154,6 +185,18 @@ export default {
 
 .nav-link i {
   font-size: 1rem;
+}
+
+.nav-link-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.nav-link-button:hover {
+  background: var(--bg-hover);
+  color: var(--danger-color);
 }
 
 .main-content {

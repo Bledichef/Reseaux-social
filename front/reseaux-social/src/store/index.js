@@ -38,6 +38,7 @@ const store = createStore({
       id: -1,
       token: "",
     },
+    user: user, // Initialiser avec l'utilisateur du localStorage
     userInfos: null,
     comments: [],
   },
