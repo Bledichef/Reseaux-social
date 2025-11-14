@@ -5,13 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     "Message",
 
     {
-      username: {
-        type: DataTypes.STRING,
-        references: {
-          model: "Users",
-          key: "username",
-        },
-      },
+      username: DataTypes.STRING, // Champ simple sans clé étrangère (redondant avec userId)
       title: DataTypes.STRING,
       content: DataTypes.STRING,
       attachement: DataTypes.STRING,

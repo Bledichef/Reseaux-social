@@ -4,7 +4,7 @@ import { createStore } from "vuex";
 const axios = require("axios");
 
 const instance = axios.create({
-  baseUrl: "http://localhost:8080/api/users/",
+  baseURL: "http://localhost:8080/api",
 });
 
 let user = localStorage.getItem("user");
@@ -16,7 +16,13 @@ if (!user) {
 } else {
   try {
     user = JSON.parse(user);
-    instance.defaults.headers.common["Authorization"] = user.token;
+    // Ajouter "Bearer " si ce n'est pas déjà présent
+    if (user.token) {
+      const token = user.token.startsWith("Bearer ") 
+        ? user.token 
+        : `Bearer ${user.token}`;
+      instance.defaults.headers.common["Authorization"] = token;
+    }
   } catch (ex) {
     user = {
       userId: -1,
@@ -32,13 +38,19 @@ const store = createStore({
       id: -1,
       token: "",
     },
+    userInfos: null,
+    comments: [],
   },
   mutations: {
     setStatus: function (state, status) {
       state.status = status;
     },
     logUser: function (state, user) {
-      instance.defaults.headers.common["Authorization"] = user.token;
+      // Ajouter "Bearer " si ce n'est pas déjà présent
+      const token = user.token && user.token.startsWith("Bearer ") 
+        ? user.token 
+        : `Bearer ${user.token}`;
+      instance.defaults.headers.common["Authorization"] = token;
       localStorage.setItem("user", JSON.stringify(user));
       state.user = user;
     },
@@ -79,30 +91,36 @@ const store = createStore({
 
       state.userInfos = userInfos;
     },
-    likeMessage: function (state, userInfos, Messageid) {
-      instance.defaults.headers.common["Authorization"] = user.token;
-
-      state.userInfos = userInfos;
+    likeMessage: function (state, data) {
+      if (data && data.userInfos) {
+        state.userInfos = data.userInfos;
+      }
     },
-    dislikeMessage: function (state, userInfos, Messageid) {
-      instance.defaults.headers.common["Authorization"] = user.token;
-
-      state.userInfos = userInfos;
+    dislikeMessage: function (state, data) {
+      if (data && data.userInfos) {
+        state.userInfos = data.userInfos;
+      }
     },
-    GetComment: function (state, Messageid) {},
-    postComment: function (state, user, userInfos, Messageid) {
-      instance.defaults.headers.common["Authorization"] = user.token;
-      state.userInfos = userInfos;
+    GetComment: function (state, comments) {
+      state.comments = comments;
     },
-    updateComment: function (state, userInfos, Messageid) {
-      instance.defaults.headers.common["Authorization"] = user.token;
-
-      state.userInfos = userInfos;
+    postComment: function (state, user, userInfos) {
+      if (user && user.token) {
+        instance.defaults.headers.common["Authorization"] = user.token;
+      }
+      if (userInfos) {
+        state.userInfos = userInfos;
+      }
     },
-    deleteComment: function (state, userInfos, Messageid) {
-      instance.defaults.headers.common["Authorization"] = user.token;
-
-      state.userInfos = userInfos;
+    updateComment: function (state, data) {
+      if (data && data.userInfos) {
+        state.userInfos = data.userInfos;
+      }
+    },
+    deleteComment: function (state, data) {
+      if (data && data.userInfos) {
+        state.userInfos = data.userInfos;
+      }
     },
   },
   actions: {
@@ -112,7 +130,7 @@ const store = createStore({
         commit;
         console.log(userInfos);
         instance
-          .post("http://localhost:8080/api/users/register", userInfos)
+          .post("/users/register", userInfos)
           .then(function (response) {
             commit("setStatus", "created");
             resolve(response);
@@ -133,7 +151,7 @@ const store = createStore({
       return new Promise((resolve, reject) => {
         console.log(userInfos);
         instance
-          .post("http://localhost:8080/api/users/login", userInfos)
+          .post("/users/login/", userInfos)
           .then(function (response) {
             commit("setStatus", "");
             commit("logUser", response.data);
@@ -151,12 +169,14 @@ const store = createStore({
       });
     },
     getUserInfos: ({ commit }) => {
+      console.log("🔐 getUserInfos - Token dans headers:", instance.defaults.headers.common["Authorization"] ? "Présent" : "ABSENT");
       instance
-        .get("http://localhost:8080/api/users/me")
+        .get("/users/me")
         .then(function (response) {
           commit("userInfos", response.data);
         })
-        .catch(function () {
+        .catch(function (error) {
+          console.error("❌ Erreur getUserInfos:", error);
           localStorage.removeItem("user");
         });
     },
@@ -166,7 +186,7 @@ const store = createStore({
         commit;
         console.log(userInfos);
         instance
-          .put("http://localhost:8080/api/users/me", userInfos)
+          .put("/users/me", userInfos)
           .then(function (response) {
             commit("setStatus", "");
             commit("getUserInfos", response.data);
@@ -187,7 +207,7 @@ const store = createStore({
         commit;
         console.log(userInfos);
         instance
-          .delete("http://localhost:8080/api/users/me", userInfos)
+          .delete("/users/me", userInfos)
           .then(function (response) {
             commit("setStatus", "");
             commit("logUser", response.data);
@@ -201,14 +221,26 @@ const store = createStore({
           });
       });
     },
-    postMessage: ({ commit }, userInfos, message) => {
-      commit("message");
+    postMessage: ({ commit, state }, messageData) => {
+      commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
-        commit;
+        // Récupérer le token depuis localStorage
+        let user = localStorage.getItem("user");
+        if (user) {
+          try {
+            user = JSON.parse(user);
+          } catch (ex) {
+            user = { token: "" };
+          }
+        } else {
+          user = { token: "" };
+        }
+        
         instance
-          .post("http://localhost:8080/api/messages/new", userInfos, message)
+          .post("/messages/new/", messageData)
           .then(function (response) {
-            commit(response.data);
+            commit("setStatus", "");
+            commit("postMessage", { user: user, userInfos: response.data });
             resolve(response);
             console.log(response);
             window.location.reload(true);
@@ -230,7 +262,7 @@ const store = createStore({
         commit;
         instance
           .put(
-            `http://localhost:8080/api/messages/${Messageid}`,
+            `/messages/${Messageid}`,
             userInfos,
             message
           )
@@ -256,7 +288,7 @@ const store = createStore({
         commit;
         instance
           .delete(
-            `http://localhost:8080/api/messages/${Messageid}`,
+            `/messages/${Messageid}`,
             userInfos,
             message
           )
@@ -275,19 +307,14 @@ const store = createStore({
           });
       });
     },
-    likeMessage: ({ commit }, userInfos, Messageid, message) => {
-      (Messageid = localStorage.Messageid), commit("message");
+    likeMessage: ({ commit }, data) => {
+      let Messageid = data.messageId || JSON.parse(localStorage.getItem("Messageid") || "0");
       return new Promise((resolve, reject) => {
         console.log(Messageid);
-        commit;
         instance
-          .post(
-            `http://localhost:8080/api/messages/${Messageid}/vote/like`,
-            userInfos,
-            message
-          )
+          .post(`/messages/${Messageid}/vote/Like`)
           .then(function (response) {
-            commit(response.data);
+            commit("likeMessage", { userInfos: response.data, Messageid: Messageid });
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
@@ -303,19 +330,14 @@ const store = createStore({
           });
       });
     },
-    dislikeMessage: ({ commit }, userInfos, Messageid, message) => {
-      (Messageid = localStorage.Messageid), commit("message");
+    dislikeMessage: ({ commit }, data) => {
+      let Messageid = data.messageId || JSON.parse(localStorage.getItem("Messageid") || "0");
       return new Promise((resolve, reject) => {
         console.log(Messageid);
-        commit;
         instance
-          .post(
-            `http://localhost:8080/api/messages/${Messageid}/vote/dislike`,
-            userInfos,
-            message
-          )
+          .post(`/messages/${Messageid}/vote/dislike`)
           .then(function (response) {
-            commit(response.data);
+            commit("dislikeMessage", { userInfos: response.data, Messageid: Messageid });
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
@@ -331,39 +353,51 @@ const store = createStore({
           });
       });
     },
-    GetComment: ({ commit }, Messageid, comment) => {
-      (Messageid = localStorage.Messageid), commit("Comment");
-      console.log(Messageid);
-      commit;
-      instance
-        .get(`http://localhost:8080/api/messages/${Messageid}/comment`)
-        .then(function (response) {
-          commit(Comment);
-          console.log(response);
-          console.log(response.data);
-          // localStorage.removeItem("Messageid");
-          localStorage.setItem("Comment", JSON.stringify(response.data));
-          window.location.reload(true);
-        })
-        .catch(function () {
-          commit("setStatus", "error_logged");
-          reject(error);
-          console.log(error);
-        });
-    },
-    postComment: ({ commit }, userInfos, Messageid, comment) => {
-      (Messageid = localStorage.Messageid), commit("Comment");
-      console.log(Messageid);
+    GetComment: ({ commit }, Messageid) => {
       return new Promise((resolve, reject) => {
-        commit;
+        if (!Messageid) {
+          Messageid = JSON.parse(localStorage.getItem("Messageid") || "0");
+        }
+        console.log(Messageid);
+        instance
+          .get(`/messages/${Messageid}/comment`)
+          .then(function (response) {
+            commit("GetComment", response.data);
+            console.log(response);
+            console.log(response.data);
+            localStorage.setItem("Comment", JSON.stringify(response.data));
+            resolve(response);
+            window.location.reload(true);
+          })
+          .catch(function (error) {
+            commit("setStatus", "error_logged");
+            reject(error);
+            console.log(error);
+          });
+      });
+    },
+    postComment: ({ commit }, commentData) => {
+      return new Promise((resolve, reject) => {
+        let Messageid = commentData.messageId || JSON.parse(localStorage.getItem("Messageid") || "0");
+        let user = localStorage.getItem("user");
+        if (user) {
+          try {
+            user = JSON.parse(user);
+          } catch (ex) {
+            user = { token: "" };
+          }
+        } else {
+          user = { token: "" };
+        }
+        
+        console.log(Messageid);
         instance
           .post(
-            `http://localhost:8080/api/messages/${Messageid}/comment/new`,
-            userInfos,
-            comment
+            `/messages/${Messageid}/comment/new`,
+            { content: commentData.content }
           )
           .then(function (response) {
-            commit(response.data);
+            commit("postComment", { user: user, userInfos: response.data });
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
@@ -379,19 +413,30 @@ const store = createStore({
           });
       });
     },
-    updateComment: ({ commit }, userInfos, Messageid, Commentid) => {
-      (Messageid = localStorage.Messageid), commit("message");
-      (Commentid = localStorage.Commentid), commit("Com");
+    updateComment: ({ commit }, commentData) => {
       return new Promise((resolve, reject) => {
-        console.log(Messageid);
-        commit;
+        let Messageid = commentData.messageId || JSON.parse(localStorage.getItem("Messageid") || "0");
+        let Commentid = commentData.commentId || JSON.parse(localStorage.getItem("Commentid") || "0");
+        let user = localStorage.getItem("user");
+        if (user) {
+          try {
+            user = JSON.parse(user);
+          } catch (ex) {
+            user = { token: "" };
+          }
+        } else {
+          user = { token: "" };
+        }
+        
+        console.log("Update comment - MessageId:", Messageid, "CommentId:", Commentid);
+        console.log("Token dans headers:", instance.defaults.headers.common["Authorization"] ? "Présent" : "ABSENT");
         instance
           .put(
-            `http://localhost:8080/api/messages/${Messageid}/comment/${Commentid}`,
-            userInfos
+            `/messages/${Messageid}/comment/${Commentid}/`,
+            { content: commentData.content }
           )
           .then(function (response) {
-            commit(response.data);
+            commit("updateComment", { userInfos: response.data });
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
@@ -399,26 +444,35 @@ const store = createStore({
             window.location.reload(true);
           })
           .catch(function (error) {
-            alert("vous ne pouvez pas effectué cette action");
+            alert("vous ne pouvez pas effectuer cette action");
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);
           });
       });
     },
-    deleteComment: ({ commit }, userInfos, Messageid, Commentid) => {
-      (Messageid = localStorage.Messageid), commit("message");
-      (Commentid = localStorage.Commentid), commit("Com");
+    deleteComment: ({ commit }, commentData) => {
       return new Promise((resolve, reject) => {
-        console.log(Messageid);
-        commit;
+        let Messageid = commentData.messageId || JSON.parse(localStorage.getItem("Messageid") || "0");
+        let Commentid = commentData.commentId || JSON.parse(localStorage.getItem("Commentid") || "0");
+        let user = localStorage.getItem("user");
+        if (user) {
+          try {
+            user = JSON.parse(user);
+          } catch (ex) {
+            user = { token: "" };
+          }
+        } else {
+          user = { token: "" };
+        }
+        
+        console.log("Delete comment - MessageId:", Messageid, "CommentId:", Commentid);
         instance
           .delete(
-            `http://localhost:8080/api/messages/${Messageid}/comment/${Commentid}`,
-            userInfos
+            `/messages/${Messageid}/comment/${Commentid}/`
           )
           .then(function (response) {
-            commit(response.data);
+            commit("deleteComment", { userInfos: response.data });
             resolve(response);
             console.log(response);
             localStorage.removeItem("Messageid");
@@ -426,7 +480,7 @@ const store = createStore({
             window.location.reload(true);
           })
           .catch(function (error) {
-            alert("vous ne pouvez pas effectué cette action");
+            alert("vous ne pouvez pas effectuer cette action");
             commit("setStatus", "error_logged");
             reject(error);
             console.log(error);

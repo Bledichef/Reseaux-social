@@ -158,9 +158,14 @@ module.exports = {
   getUserProfile: function (req, res) {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
+    console.log("🔐 getUserProfile - Authorization header:", headerAuth ? headerAuth.substring(0, 30) + "..." : "AUCUN");
     var userId = jwtUtils.getUserId(headerAuth);
+    console.log("🔐 getUserProfile - userId extrait:", userId);
 
-    if (userId < 0) return res.status(400).json({ error: "wrong token" });
+    if (userId < 0) {
+      console.error("❌ getUserProfile - Token invalide ou manquant, userId:", userId);
+      return res.status(400).json({ error: "wrong token" });
+    }
 
     models.User.findOne({
       attributes: ["id", "email", "username", "job"],

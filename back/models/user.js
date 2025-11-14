@@ -4,7 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     "User",
     {
       email: DataTypes.STRING,
-      username: DataTypes.STRING,
+      username: {
+        type: DataTypes.STRING,
+        unique: true, // Index unique pour permettre les clés étrangères
+      },
       password: DataTypes.STRING,
       job: DataTypes.STRING,
       isAdmin: DataTypes.BOOLEAN,
@@ -14,18 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         associate: function (models) {
           // associations can be defined here
           models.User.hasMany(models.Message, {
-            foreignKey: {
-              foreignKey: "id",
-              onDelete: "cascade",
-              hooks: true,
-            },
+            foreignKey: "userId",
+            onDelete: "cascade",
+            hooks: true,
           });
           models.User.hasMany(models.Comment, {
-            foreignKey: {
-              foreignKey: "id",
-              onDelete: "cascade",
-              hooks: true,
-            },
+            foreignKey: "userId",
+            onDelete: "cascade",
+            hooks: true,
           });
         },
       },

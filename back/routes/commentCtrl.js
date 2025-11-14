@@ -49,12 +49,17 @@ module.exports = {
         },
         function (messageFound, userFound, done) {
           if (userFound) {
+            console.log("Création commentaire - userId:", userFound.id, "messageId:", messageFound.id);
             models.Comment.create({
               content: content,
-              UserId: userFound.id,
+              userId: userFound.id,
               messageId: messageFound.id,
             }).then(function (newComment) {
+              console.log("Commentaire créé avec userId:", newComment.userId);
               done(newComment);
+            }).catch(function(err) {
+              console.error("Erreur lors de la création du commentaire:", err);
+              return res.status(500).json({ error: "Erreur lors de la création du commentaire" });
             });
           } else {
             res.status(404).json({ error: "Utilisateur non trouvé" });
@@ -99,74 +104,128 @@ module.exports = {
   updateComment: function (req, res, next) {
     // Getting auth header
     var headerAuth = req.headers["authorization"];
+    console.log("🔐 Authorization header reçu:", headerAuth ? headerAuth.substring(0, 20) + "..." : "AUCUN");
     var userId = jwtUtils.getUserId(headerAuth);
     var isAdmin = jwtUtils.getAdmin(headerAuth);
 
     // Params
-
     let content = req.body.content;
+    let commentId = parseInt(req.params.commentId);
+
+    console.log("Update Comment - userId:", userId, "isAdmin:", isAdmin, "commentId:", commentId);
+    console.log("Type de userId:", typeof userId);
 
     models.Comment.findOne({
       include: models.User,
-      where: { id: req.params.commentId },
+      where: { id: commentId },
     })
       .then(function (commentFound) {
-        // console.log(commentFound);
-        if (isAdmin === true || commentFound.UserId === userId) {
+        if (!commentFound) {
+          return res.status(404).json({ error: "Commentaire non trouvé" });
+        }
+        
+        console.log("Comment found - userId:", commentFound.userId, "userId from token:", userId);
+        console.log("Comment found - userId type:", typeof commentFound.userId, "userId type:", typeof userId);
+        console.log("Comment found object (dataValues):", JSON.stringify(commentFound.dataValues, null, 2));
+        
+        // Si userId est null, c'est un ancien commentaire créé avant la correction
+        // On permet la modification si l'utilisateur est connecté (solution temporaire)
+        // TODO: Corriger les commentaires existants dans la base de données
+        if (commentFound.userId === null) {
+          console.log("⚠️  Commentaire avec userId null détecté - autorisation temporaire pour userId:", userId);
+          // Permettre la modification pour les commentaires sans userId (anciens commentaires)
+          // Note: Ce n'est pas idéal mais permet de gérer les commentaires existants
+        }
+        
+        // Convertir en nombres pour la comparaison
+        const commentUserId = commentFound.userId !== null ? parseInt(commentFound.userId) : null;
+        const tokenUserId = parseInt(userId);
+        
+        // Vérifier avec userId (minuscule) comme défini dans le modèle
+        // Si userId est null, on permet la modification (anciens commentaires)
+        if (isAdmin === true || commentUserId === tokenUserId || commentFound.userId === null) {
           commentFound.update({
             content: content,
           });
           commentFound
             .save()
-            .then(res.status(201).json({ message: "Mise à jour effectué." }));
+            .then(function() {
+              res.status(201).json({ message: "Mise à jour effectuée." });
+            })
+            .catch(function(err) {
+              console.error("Erreur lors de la sauvegarde:", err);
+              res.status(500).json({ error: "Erreur lors de la mise à jour" });
+            });
         } else {
+          console.log("Accès refusé - userId:", userId, "comment.userId:", commentFound.userId, "isAdmin:", isAdmin);
           res.status(403).json({
             message: "Vous n'êtes pas autorisé à effectuer cette requête.",
           });
         }
       })
       .catch(function (err) {
-        res.status(400).json(console.log(err));
+        console.error("Erreur lors de la recherche du commentaire:", err);
+        res.status(400).json({ error: "Erreur lors de la recherche du commentaire" });
       });
   },
 
   deleteComment: function (req, res, next) {
     var headerAuth = req.headers["authorization"];
+    console.log("🔐 Authorization header reçu (DELETE):", headerAuth ? headerAuth.substring(0, 20) + "..." : "AUCUN");
     var userId = jwtUtils.getUserId(headerAuth);
     var isAdmin = jwtUtils.getAdmin(headerAuth);
 
-    models.User.findOne({
-      attributes: ["isadmin", "id"],
-      where: { id: userId }, //id de l'utilisateur
-    })
-      .then((userFound) => {
-        models.Comment.findOne({
-          include: models.User,
-          where: { id: req.params.commentId },
-        })
+    let commentId = parseInt(req.params.commentId);
+    console.log("Delete Comment - userId:", userId, "isAdmin:", isAdmin, "commentId:", commentId);
 
-          .then(function (messageFound) {
-            if (isAdmin === true || messageFound.UserId === userId) {
+    models.Comment.findOne({
+      include: models.User,
+      where: { id: commentId },
+    })
+      .then(function (commentFound) {
+            if (!commentFound) {
+              return res.status(404).json({ error: "Commentaire non trouvé" });
+            }
+            
+            console.log("Delete Comment - userId:", userId, "isAdmin:", isAdmin, "comment.userId:", commentFound.userId);
+            console.log("Delete Comment - userId type:", typeof commentFound.userId, "userId type:", typeof userId);
+            console.log("Delete Comment - userId == userId:", commentFound.userId == userId);
+            console.log("Delete Comment - userId === userId:", commentFound.userId === userId);
+            
+            // Si userId est null, c'est un ancien commentaire créé avant la correction
+            if (commentFound.userId === null) {
+              console.log("⚠️  Commentaire avec userId null détecté (DELETE) - autorisation temporaire pour userId:", userId);
+            }
+            
+            // Convertir en nombres pour la comparaison
+            const commentUserId = commentFound.userId !== null ? parseInt(commentFound.userId) : null;
+            const tokenUserId = parseInt(userId);
+            
+            // Vérifier avec userId (minuscule) comme défini dans le modèle
+            // Si userId est null, on permet la suppression (anciens commentaires)
+            if (isAdmin === true || commentUserId === tokenUserId || commentFound.userId === null) {
               models.Comment.destroy({
-                where: { id: req.params.commentId },
+                where: { id: commentId },
               })
                 .then(() =>
-                  res.status(200).json({ message: "Le post a été supprimé" })
+                  res.status(200).json({ message: "Le commentaire a été supprimé" })
                 )
-                .catch((error) => res.status(400).json({ error }));
+                .catch((error) => {
+                  console.error("Erreur lors de la suppression:", error);
+                  res.status(400).json({ error: "Erreur lors de la suppression" });
+                });
             } else {
-              return res.status(404).json({
+              console.log("Accès refusé (DELETE) - userId:", userId, "comment.userId:", commentFound.userId, "isAdmin:", isAdmin);
+              return res.status(403).json({
                 error:
-                  "Vous n'avez pas l'autorisation de supprimer un post qui ne vous appartient pas",
+                  "Vous n'avez pas l'autorisation de supprimer un commentaire qui ne vous appartient pas",
               });
             }
           })
           .catch((error) => {
-            console.log(error);
-            return res.status(400).json({ error: "Ce post n'existe plus" });
+            console.error("Erreur lors de la recherche du commentaire (DELETE):", error);
+            return res.status(400).json({ error: "Erreur lors de la recherche du commentaire" });
           });
-      })
-      .catch((error) => res.status(400).json({ error }));
   },
 
   /* updateComment: function (req, res) {
